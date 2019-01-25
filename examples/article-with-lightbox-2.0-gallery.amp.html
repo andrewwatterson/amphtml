@@ -341,41 +341,6 @@
 </head>
 
 <body>
-  <amp-analytics>
-      <script type="application/json">
-      {
-        "requests": {
-          "open": "https://foo.com/open",
-          "thumb": "https://foo.com/thumb",
-          "slide": "https://foo.com/slide",
-          "controlToggle": "https://foo.com/controlToggle",
-          "descExpand": "https://foo.com/descExpand"
-        },
-        "triggers": {
-          "trackLightboxOpened": {
-            "on": "lightboxOpened",
-            "request": "open"
-          },
-          "trackThumbnailsViewToggled": {
-            "on": "thumbnailsViewToggled",
-            "request": "thumb"
-          },
-          "trackSlideChange": {
-            "on": "slideChange",
-            "request": "slide"
-          },
-          "trackControlsToggled": {
-            "on": "controlsToggled",
-            "request": "controlToggle"
-          },
-          "trackDescriptionOverflowToggled": {
-            "on": "descriptionOverflowToggled",
-            "request": "descExpand"
-          }
-        }
-      }
-      </script>
-  </amp-analytics>
   <header id="top-bar">
     <button class="menu" title="Toggle Sidebar">
       ☰
