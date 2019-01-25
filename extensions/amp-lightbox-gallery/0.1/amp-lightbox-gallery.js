@@ -69,11 +69,13 @@ const LightboxControlsModes = {
  * The number of pixels of movement to go from the darkest to lightest overlay
  * while doing a swipe to close gesture.
  */
-const SWIPE_TO_CLOSE_DISTANCE = 200;
+const SWIPE_TO_CLOSE_DISTANCE = 50;
+//const SWIPE_TO_CLOSE_DISTANCE = 200;
 /**
  * The number of pixels needed to close when doing a swipe to close gesture.
  */
-const SWIPE_TO_CLOSE_DISTANCE_THRESHOLD = SWIPE_TO_CLOSE_DISTANCE / 4;
+const SWIPE_TO_CLOSE_DISTANCE_THRESHOLD = SWIPE_TO_CLOSE_DISTANCE;
+//const SWIPE_TO_CLOSE_DISTANCE_THRESHOLD = SWIPE_TO_CLOSE_DISTANCE / 4;
 /**
  * The number of pixels needed to completely fade out the controls when doing a
  * swipe to close gesture.
@@ -90,17 +92,20 @@ const SWIPE_TO_CLOSE_VELOCITY_THRESHOLD = 0.65;
  */
 const SWIPE_TO_CLOSE_MIN_OPACITY = 0.1;
 /** The smallest scale possible when doing swipe to close gesture. */
-const SWIPE_TO_CLOSE_MIN_SCALE = 0.85;
+const SWIPE_TO_CLOSE_MIN_SCALE = 0.9;
+//const SWIPE_TO_CLOSE_MIN_SCALE = 0.85;
 /**
  * How much distance to cover, based on the velocity, when a user releases a
  * swipe to close gesture.
  */
-const SWIPE_TO_CLOSE_VELOCITY_TO_DISTANCE_FACTOR = 22.5 * 2;
+const SWIPE_TO_CLOSE_VELOCITY_TO_DISTANCE_FACTOR = 22.5;
+//const SWIPE_TO_CLOSE_VELOCITY_TO_DISTANCE_FACTOR = 22.5 * 2;
 /**
  * How much time to spend, based on the distance to travel, when moving to the
  * final location of a swipe (after the user has released).
  */
-const SWIPE_TO_CLOSE_DISTANCE_TO_TIME_FACTOR = 1;
+const SWIPE_TO_CLOSE_DISTANCE_TO_TIME_FACTOR = 10;
+//const SWIPE_TO_CLOSE_DISTANCE_TO_TIME_FACTOR = 1;
 /**
  * How much time to spend, based on the distance to travel, when snapping back
  * after an cancelled swipe to close gesture.
@@ -120,7 +125,8 @@ const FADE_CURVE = bezierCurve(0.8, 0, 0.2, 1);
 const MAX_TRANSITION_DURATION = 1000; // ms
 const MIN_TRANSITION_DURATION = 500; // ms
 const MAX_DISTANCE_APPROXIMATION = 250; // px
-const MOTION_DURATION_RATIO = .5; // fraction of animation
+const MOTION_DURATION_RATIO = 0.8; // fraction of animation
+//const MOTION_DURATION_RATIO = .5; // fraction of animation
 
 /**
  * The structure that represents the metadata of a lightbox element
