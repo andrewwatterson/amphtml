@@ -92,19 +92,16 @@ const SWIPE_TO_CLOSE_VELOCITY_THRESHOLD = 0.65;
  */
 const SWIPE_TO_CLOSE_MIN_OPACITY = 0.4;
 /** The smallest scale possible when doing swipe to close gesture. */
-//const SWIPE_TO_CLOSE_MIN_SCALE = 0.9;
 const SWIPE_TO_CLOSE_MIN_SCALE = 0.7;
 /**
  * How much distance to cover, based on the velocity, when a user releases a
  * swipe to close gesture.
  */
-//const SWIPE_TO_CLOSE_VELOCITY_TO_DISTANCE_FACTOR = 22.5;
-const SWIPE_TO_CLOSE_VELOCITY_TO_DISTANCE_FACTOR = 2;
+const SWIPE_TO_CLOSE_VELOCITY_TO_DISTANCE_FACTOR = 22.5;
 /**
  * How much time to spend, based on the distance to travel, when moving to the
  * final location of a swipe (after the user has released).
  */
-//const SWIPE_TO_CLOSE_DISTANCE_TO_TIME_FACTOR = 10;
 const SWIPE_TO_CLOSE_DISTANCE_TO_TIME_FACTOR = 1;
 /**
  * How much time to spend, based on the distance to travel, when snapping back
@@ -115,21 +112,32 @@ const SWIPE_TO_CLOSE_SNAP_BACK_TIME_FACTOR = 5;
  * The timing function to use when carrying momentum after releasing a swipe to
  * close gesture. This closely approximates an expontential decay of velocity.
  */
-const outArr = [0,.4,.2,1];
-//const outArr = [.2,.67,.33,.95];
-//const SWIPE_TO_CLOSE_MOMENTUM_TIMING = 'cubic-bezier(0.15, 1.1, 0.1, 1)';
+
+const ORIGINAL_DRAMA = [.15,1.1,.1,1];
+const SEPAND_NEW_OUT = [.2,.67,.33,.95];
+
+const SLOW_TO_FAST = [.4,0,1,.6];
+const FAST_TO_SLOW = [0,.4,.6,1];
+const LINEAR = [0,0,1,1];
+
+const SLOWER_TO_FASTER = [.6,0,1,.4];
+const FASTER_TO_SLOWER = [0,.6,.4,1];
+
+const SLOW_TO_FAST_S = [.4,0,.8,1];
+const FAST_TO_SLOW_S = [.2,0,.6,1];
+
+const outArr = FAST_TO_SLOW;
 const SWIPE_TO_CLOSE_MOMENTUM_TIMING = `cubic-bezier(${outArr[0]}, ${outArr[1]}, ${outArr[2]}, ${outArr[3]})`;
 
 // Use S Curves for entry and exit animations
-const closeArr = [.4,0,1,.6];
-const TRANSITION_CURVE = {x1: closeArr[0], y1: closeArr[1], x2: closeArr[2], y2: closeArr[3]};
+const inArr = SLOW_TO_FAST;
+const TRANSITION_CURVE = {x1: inArr[0], y1: inArr[1], x2: inArr[2], y2: inArr[3]};
 const FADE_CURVE = bezierCurve(0.8, 0, 0.2, 1);
 
 const MAX_TRANSITION_DURATION = 1000; // ms
 const MIN_TRANSITION_DURATION = 500; // ms
 const MAX_DISTANCE_APPROXIMATION = 250; // px
-//const MOTION_DURATION_RATIO = 0.8; // fraction of animation
-const MOTION_DURATION_RATIO = .3; // fraction of animation
+const MOTION_DURATION_RATIO = 0.3; // fraction of animation
 
 /**
  * The structure that represents the metadata of a lightbox element
