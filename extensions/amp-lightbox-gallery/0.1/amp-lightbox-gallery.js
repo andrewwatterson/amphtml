@@ -123,21 +123,21 @@ const LINEAR = [0,0,1,1];
 const SLOWER_TO_FASTER = [.6,0,1,.4];
 const FASTER_TO_SLOWER = [0,.6,.4,1];
 
-const SLOW_TO_FAST_S = [.4,0,.8,1];
+const SLOW_TO_FAST_S = [.8,0,.2,1];
 const FAST_TO_SLOW_S = [.2,0,.6,1];
 
 const outArr = FAST_TO_SLOW;
 const SWIPE_TO_CLOSE_MOMENTUM_TIMING = `cubic-bezier(${outArr[0]}, ${outArr[1]}, ${outArr[2]}, ${outArr[3]})`;
 
 // Use S Curves for entry and exit animations
-const inArr = SLOW_TO_FAST;
+const inArr = SLOW_TO_FAST_S;
 const TRANSITION_CURVE = {x1: inArr[0], y1: inArr[1], x2: inArr[2], y2: inArr[3]};
 const FADE_CURVE = bezierCurve(0.8, 0, 0.2, 1);
 
 const MAX_TRANSITION_DURATION = 1000; // ms
 const MIN_TRANSITION_DURATION = 500; // ms
 const MAX_DISTANCE_APPROXIMATION = 250; // px
-const MOTION_DURATION_RATIO = 0.3; // fraction of animation
+const MOTION_DURATION_RATIO = 0.5; // fraction of animation
 
 /**
  * The structure that represents the metadata of a lightbox element
@@ -859,6 +859,7 @@ export class AmpLightboxGallery extends AMP.BaseElement {
     const {controlsContainer_, mask_} = this;
     setStyles(carousel, {
       transform: carouselTransform,
+      transformOrigin: "50% 50%",
       transition: '',
     });
     setStyles(mask_, {
