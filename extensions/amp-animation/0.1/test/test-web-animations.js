@@ -13,14 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {
-  Builder,
-  WebAnimationRunner,
-} from '../web-animations';
-import {
-  WebAnimationPlayState,
-} from '../web-animation-types';
+import {Builder} from '../web-animations';
+import {NativeWebAnimationRunner} from '../runners/native-web-animation-runner';
+import {WebAnimationPlayState} from '../web-animation-types';
 import {isArray, isObject} from '../../../../src/types';
 import {poll} from '../../../../testing/iframe';
 import {user} from '../../../../src/log';
@@ -927,6 +922,16 @@ describes.realWin('MeasureScanner', {amp: 1}, env => {
     expect(requests[1].timing.delay).to.equal(100);
   });
 
+  it('should resolve length() correctly', () => {
+    const requests = scan({
+      selector: '.target',
+      delay: 'calc(100ms * length())',
+      keyframes: {},
+    });
+    expect(requests).to.have.length(2);
+    expect(requests[1].timing.delay).to.equal(200);
+  });
+
   it('should be able to resolve animation with args', () => {
     const builder = new Builder(win, doc, 'https://acme.org/',
         vsync, /* resources */ null);
@@ -1534,7 +1539,7 @@ describes.realWin('MeasureScanner', {amp: 1}, env => {
 });
 
 
-describes.sandboxed('WebAnimationRunner', {}, () => {
+describes.sandboxed('NativeWebAnimationRunner', {}, () => {
   let target1, target2;
   let target1Mock, target2Mock;
   let keyframes1, keyframes2;
@@ -1585,7 +1590,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
     target2 = {style: createStyle(), animate: () => anim2};
     target2Mock = sandbox.mock(target2);
 
-    runner = new WebAnimationRunner([
+    runner = new NativeWebAnimationRunner([
       {target: target1, keyframes: keyframes1, timing: timing1},
       {target: target2, keyframes: keyframes2, timing: timing2},
     ]);
@@ -1660,7 +1665,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
       '--var1': '1px',
       '--var2': '2s',
     };
-    runner = new WebAnimationRunner([
+    runner = new NativeWebAnimationRunner([
       {vars, target: target1, keyframes: keyframes1, timing: timing1},
     ]);
     target1Mock.expects('animate')
@@ -1844,7 +1849,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterations: 1,
         iterationStart: 0,
       };
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing},
       ]);
       expect(runner.getTotalDuration_()).to.equal(0);
@@ -1858,7 +1863,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterations: 0,
         iterationStart: 0,
       };
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing},
       ]);
 
@@ -1874,7 +1879,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterations: 1,
         iterationStart: 0,
       };
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing},
       ]);
       expect(runner.getTotalDuration_()).to.equal(300);
@@ -1888,7 +1893,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterations: 3,
         iterationStart: 0,
       };
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing},
       ]);
       expect(runner.getTotalDuration_()).to.equal(500); // 3*100 + 100 + 100
@@ -1902,7 +1907,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterations: 3,
         iterationStart: 2.5,
       };
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing},
       ]);
       // iterationStart is 2.5, the first 2.5 out of 3 iterations are ignored.
@@ -1917,7 +1922,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterations: 'infinity',
         iterationStart: 0,
       };
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing},
       ]);
       allowConsoleError(() => {
@@ -1944,7 +1949,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterationStart: 0,
       };
 
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing: timing1},
         {target: target1, keyframes: keyframes1, timing: timing2},
       ]);
@@ -1971,7 +1976,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterationStart: 0,
       };
 
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing: timing1},
         {target: target1, keyframes: keyframes1, timing: timing2},
       ]);
@@ -1998,7 +2003,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterationStart: 0,
       };
 
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing: timing1},
         {target: target1, keyframes: keyframes1, timing: timing2},
       ]);
@@ -2024,7 +2029,7 @@ describes.sandboxed('WebAnimationRunner', {}, () => {
         iterationStart: 0,
       };
 
-      const runner = new WebAnimationRunner([
+      const runner = new NativeWebAnimationRunner([
         {target: target1, keyframes: keyframes1, timing: timing1},
         {target: target1, keyframes: keyframes1, timing: timing2},
       ]);

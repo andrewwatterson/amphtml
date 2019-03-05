@@ -91,8 +91,10 @@ import {admixer} from '../ads/admixer';
 import {adocean} from '../ads/adocean';
 import {adpicker} from '../ads/adpicker';
 import {adplugg} from '../ads/adplugg';
+import {adpon} from '../ads/adpon';
 import {adreactor} from '../ads/adreactor';
 import {adsense} from '../ads/google/adsense';
+import {adsensor} from '../ads/adsensor';
 import {adsnative} from '../ads/adsnative';
 import {adspeed} from '../ads/adspeed';
 import {adspirit} from '../ads/adspirit';
@@ -158,6 +160,7 @@ import {improvedigital} from '../ads/improvedigital';
 import {inmobi} from '../ads/inmobi';
 import {innity} from '../ads/innity';
 import {ix} from '../ads/ix';
+import {jubna} from '../ads/jubna';
 import {kargo} from '../ads/kargo';
 import {kiosked} from '../ads/kiosked';
 import {kixer} from '../ads/kixer';
@@ -176,6 +179,7 @@ import {microad} from '../ads/microad';
 import {miximedia} from '../ads/miximedia';
 import {mixpo} from '../ads/mixpo';
 import {monetizer101} from '../ads/monetizer101';
+import {mox} from '../ads/mox';
 import {mytarget} from '../ads/mytarget';
 import {mywidget} from '../ads/mywidget';
 import {nativo} from '../ads/nativo';
@@ -195,6 +199,7 @@ import {polymorphicads} from '../ads/polymorphicads';
 import {popin} from '../ads/popin';
 import {postquare} from '../ads/postquare';
 import {pressboard} from '../ads/pressboard';
+import {promoteiq} from '../ads/promoteiq';
 import {pubexchange} from '../ads/pubexchange';
 import {pubguru} from '../ads/pubguru';
 import {pubmatic} from '../ads/pubmatic';
@@ -202,6 +207,7 @@ import {pubmine} from '../ads/pubmine';
 import {pulsepoint} from '../ads/pulsepoint';
 import {purch} from '../ads/purch';
 import {quoraad} from '../ads/quoraad';
+import {rbinfox} from '../ads/rbinfox';
 import {realclick} from '../ads/realclick';
 import {recomad} from '../ads/recomad';
 import {relap} from '../ads/relap';
@@ -210,6 +216,7 @@ import {revjet} from '../ads/revjet';
 import {rfp} from '../ads/rfp';
 import {rubicon} from '../ads/rubicon';
 import {runative} from '../ads/runative';
+import {sas} from '../ads/sas';
 import {sekindo} from '../ads/sekindo';
 import {sharethrough} from '../ads/sharethrough';
 import {sklik} from '../ads/sklik';
@@ -224,10 +231,13 @@ import {spotx} from '../ads/spotx';
 import {sunmedia} from '../ads/sunmedia';
 import {swoop} from '../ads/swoop';
 import {taboola} from '../ads/taboola';
+import {tcsemotion} from '../ads/tcsemotion';
 import {teads} from '../ads/teads';
+import {torimochi} from '../ads/torimochi';
 import {triplelift} from '../ads/triplelift';
 import {trugaze} from '../ads/trugaze';
 import {uas} from '../ads/uas';
+import {ucfunnel} from '../ads/ucfunnel';
 import {unruly} from '../ads/unruly';
 import {uzou} from '../ads/uzou';
 import {valuecommerce} from '../ads/valuecommerce';
@@ -253,6 +263,7 @@ import {zedo} from '../ads/zedo';
 import {zen} from '../ads/zen';
 import {zergnet} from '../ads/zergnet';
 import {zucks} from '../ads/zucks';
+import {speakol} from '../ads/speakol';
 
 
 /**
@@ -267,6 +278,7 @@ const AMP_EMBED_ALLOWED = {
   dable: true,
   engageya: true,
   epeex: true,
+  jubna: true,
   kuadio: true,
   'mantis-recommend': true,
   miximedia: true,
@@ -275,12 +287,14 @@ const AMP_EMBED_ALLOWED = {
   plista: true,
   postquare: true,
   pubexchange: true,
+  rbinfox: true,
   smartclip: true,
   smi2: true,
   taboola: true,
   zen: true,
   zergnet: true,
   runative: true,
+  speakol: true,
 };
 
 init(window);
@@ -311,8 +325,10 @@ register('admixer', admixer);
 register('adocean', adocean);
 register('adpicker', adpicker);
 register('adplugg', adplugg);
+register('adpon', adpon);
 register('adreactor', adreactor);
 register('adsense', adsense);
+register('adsensor', adsensor);
 register('adsnative', adsnative);
 register('adspeed', adspeed);
 register('adspirit', adspirit);
@@ -384,6 +400,7 @@ register('industrybrains', industrybrains);
 register('inmobi', inmobi);
 register('innity', innity);
 register('ix', ix);
+register('jubna', jubna);
 register('kargo', kargo);
 register('kiosked', kiosked);
 register('kixer', kixer);
@@ -404,6 +421,7 @@ register('microad', microad);
 register('miximedia', miximedia);
 register('mixpo', mixpo);
 register('monetizer101', monetizer101);
+register('mox', mox);
 register('mytarget', mytarget);
 register('mywidget', mywidget);
 register('nativo', nativo);
@@ -423,6 +441,7 @@ register('polymorphicads', polymorphicads);
 register('popin', popin);
 register('postquare', postquare);
 register('pressboard', pressboard);
+register('promoteiq', promoteiq);
 register('pubexchange', pubexchange);
 register('pubguru', pubguru);
 register('pubmatic', pubmatic);
@@ -430,6 +449,7 @@ register('pubmine', pubmine);
 register('pulsepoint', pulsepoint);
 register('purch', purch);
 register('quoraad', quoraad);
+register('rbinfox', rbinfox);
 register('realclick', realclick);
 register('reddit', reddit);
 register('recomad', recomad);
@@ -439,6 +459,7 @@ register('revjet', revjet);
 register('rfp', rfp);
 register('rubicon', rubicon);
 register('runative', runative);
+register('sas', sas);
 register('sekindo', sekindo);
 register('sharethrough', sharethrough);
 register('sklik', sklik);
@@ -453,11 +474,14 @@ register('spotx', spotx);
 register('sunmedia', sunmedia);
 register('swoop', swoop);
 register('taboola', taboola);
+register('tcsemotion', tcsemotion);
 register('teads', teads);
+register('torimochi', torimochi);
 register('triplelift', triplelift);
 register('trugaze', trugaze);
 register('twitter', twitter);
 register('uas', uas);
+register('ucfunnel', ucfunnel);
 register('unruly', unruly);
 register('uzou', uzou);
 register('valuecommerce', valuecommerce);
@@ -485,6 +509,7 @@ register('zedo', zedo);
 register('zen', zen);
 register('zergnet', zergnet);
 register('zucks', zucks);
+register('speakol', speakol);
 
 // For backward compat, we always allow these types without the iframe
 // opting in.

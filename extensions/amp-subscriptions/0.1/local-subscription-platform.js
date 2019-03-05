@@ -23,7 +23,7 @@ import {PageConfig} from '../../../third_party/subscriptions-project/config';
 import {Services} from '../../../src/services';
 import {UrlBuilder} from './url-builder';
 import {assertHttpsUrl} from '../../../src/url';
-import {closestBySelector} from '../../../src/dom';
+import {closestAncestorElementBySelector} from '../../../src/dom';
 import {dev, devAssert, userAssert} from '../../../src/log';
 import {dict} from '../../../src/utils/object';
 
@@ -39,9 +39,8 @@ export class LocalSubscriptionPlatform {
    * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampdoc
    * @param {!JsonObject} platformConfig
    * @param {!./service-adapter.ServiceAdapter} serviceAdapter
-   * @param {!./analytics.SubscriptionAnalytics} subscriptionAnalytics
    */
-  constructor(ampdoc, platformConfig, serviceAdapter, subscriptionAnalytics) {
+  constructor(ampdoc, platformConfig, serviceAdapter) {
     /** @const */
     this.ampdoc_ = ampdoc;
 
@@ -66,25 +65,25 @@ export class LocalSubscriptionPlatform {
         'Authorization Url'
     );
 
-    /** @private {!UrlBuilder} */
+    /** @private @const {!UrlBuilder} */
     this.urlBuilder_ = new UrlBuilder(
         this.ampdoc_,
         this.serviceAdapter_.getReaderId('local'));
 
-    /** @private {!./analytics.SubscriptionAnalytics} */
-    this.subscriptionAnalytics_ = subscriptionAnalytics;
+    /** @private @const {!./analytics.SubscriptionAnalytics} */
+    this.subscriptionAnalytics_ = serviceAdapter.getAnalytics();
 
     userAssert(this.serviceConfig_['actions'],
         'Actions have not been defined in the service config');
 
-    /** @private {!Actions} */
+    /** @private @const {!Actions} */
     this.actions_ = new Actions(
         this.ampdoc_, this.urlBuilder_,
         this.subscriptionAnalytics_,
         this.validateActionMap(this.serviceConfig_['actions'])
     );
 
-    /** @private {!LocalSubscriptionPlatformRenderer}*/
+    /** @private @const {!LocalSubscriptionPlatformRenderer}*/
     this.renderer_ = new LocalSubscriptionPlatformRenderer(this.ampdoc_,
         serviceAdapter.getDialog(), this.serviceAdapter_);
 
@@ -120,8 +119,9 @@ export class LocalSubscriptionPlatform {
    */
   initializeListeners_() {
     this.rootNode_.addEventListener('click', e => {
-      const element = closestBySelector(dev().assertElement(e.target),
-          '[subscriptions-action]');
+      const element =
+        closestAncestorElementBySelector(dev().assertElement(e.target),
+            '[subscriptions-action]');
       this.handleClick_(element);
     });
   }

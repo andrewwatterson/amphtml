@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 import {Services} from '../../../src/services';
-import {closestBySelector} from '../../../src/dom';
+import {closestAncestorElementBySelector} from '../../../src/dom';
 import {createShadowRoot} from '../../../src/shadow-embed';
 import {getMode} from '../../../src/mode';
 import {getSourceOrigin} from '../../../src/url';
+import {getState} from '../../../src/history';
 import {user, userAssert} from '../../../src/log';
 
 /**
@@ -85,7 +86,7 @@ export function unscaledClientRect(el) {
  * @return {?AmpElement}
  */
 export function ampMediaElementFor(el) {
-  return closestBySelector(el, 'amp-video, amp-audio');
+  return closestAncestorElementBySelector(el, 'amp-video, amp-audio');
 }
 
 
@@ -222,4 +223,41 @@ export function getSourceOriginForElement(element, url) {
     domainName = Services.urlForDoc(element).parse(url).hostname;
   }
   return domainName;
+}
+
+/** @enum {string} */
+export const HistoryState = {
+  ATTACHMENT_PAGE_ID: 'ampStoryAttachmentPageId',
+  BOOKEND_ACTIVE: 'ampStoryBookendActive',
+  PAGE_ID: 'ampStoryPageId',
+  NAVIGATION_PATH: 'ampStoryNavigationPath',
+};
+
+/**
+ * Updates the value for a given state in the window history.
+ * @param {!Window} win
+ * @param {string} stateName
+ * @param {string|boolean|Array<string>|null} value
+ */
+export function setHistoryState(win, stateName, value) {
+  const {history} = win;
+  const state = getState(history) || {};
+  const newHistory = Object.assign({}, /** @type {!Object} */ (state),
+      {[stateName]: value});
+
+  history.replaceState(newHistory, '');
+}
+
+/**
+ * Returns the value of a given state of the window history.
+ * @param {!Window} win
+ * @param {string} stateName
+ * @return {?string}
+ */
+export function getHistoryState(win, stateName) {
+  const {history} = win;
+  if (history && getState(history)) {
+    return getState(history)[stateName];
+  }
+  return null;
 }

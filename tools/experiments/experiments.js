@@ -42,12 +42,21 @@ const COOKIE_MAX_AGE_MS = COOKIE_MAX_AGE_DAYS * MS_PER_DAY;
 let ExperimentDef;
 
 /**
- * This experiment is special because it uses a different mechanism that is
+ * These experiments are special because they use a different mechanism that is
  * interpreted by the server to deliver a different version of the AMP
  * JS libraries.
  */
 const CANARY_EXPERIMENT_ID = 'dev-channel';
+const RC_EXPERIMENT_ID = 'rc-channel';
 
+/**
+ * The different states of the AMP_CANARY cookie.
+ */
+const AMP_CANARY_COOKIE = {
+  DISABLED: '0',
+  CANARY: '1',
+  RC: '2',
+};
 
 /** @const {!Array<!ExperimentDef>} */
 const EXPERIMENTS = [
@@ -57,6 +66,13 @@ const EXPERIMENTS = [
     name: 'AMP Dev Channel (more info)',
     spec: 'https://github.com/ampproject/amphtml/blob/master/' +
         'contributing/release-schedule.md#amp-dev-channel',
+  },
+  // Release Candidate (RC Channel)
+  {
+    id: RC_EXPERIMENT_ID,
+    name: 'AMP RC Channel (more info)',
+    spec: 'https://github.com/ampproject/amphtml/blob/master/' +
+        'contributing/release-schedule.md#amp-release-candidate-rc-channel',
   },
   {
     id: 'alp',
@@ -87,12 +103,6 @@ const EXPERIMENTS = [
     name: 'AMP Auto Ads',
     spec: 'https://github.com/ampproject/amphtml/issues/6196',
     cleanupIssue: 'https://github.com/ampproject/amphtml/issues/6217',
-  },
-  {
-    id: 'amp-auto-ads-adsense-holdout',
-    name: 'AMP Auto Ads AdSense Holdout',
-    spec: 'https://github.com/ampproject/amphtml/issues/6196',
-    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/9247',
   },
   {
     id: 'amp-auto-ads-adsense-responsive',
@@ -210,11 +220,6 @@ const EXPERIMENTS = [
     spec: 'https://github.com/ampproject/amphtml/issues/9277',
   },
   {
-    id: 'user-error-reporting',
-    name: 'Report error to publishers',
-    spec: 'https://github.com/ampproject/amphtml/issues/6415',
-  },
-  {
     id: 'disable-rtc',
     name: 'Disable AMP RTC',
     spec: 'https://github.com/ampproject/amphtml/issues/8551',
@@ -229,12 +234,6 @@ const EXPERIMENTS = [
     name: 'Visual storytelling in AMP (v0.1)',
     spec: 'https://github.com/ampproject/amphtml/issues/11329',
     cleanupIssue: 'https://github.com/ampproject/amphtml/issues/14357',
-  },
-  {
-    id: 'amp-story-scaling',
-    name: 'Scale pages dynamically in amp-story by default',
-    spec: 'https://github.com/ampproject/amphtml/issues/12902',
-    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/12902',
   },
   {
     id: 'disable-amp-story-desktop',
@@ -271,6 +270,12 @@ const EXPERIMENTS = [
     spec: 'https://github.com/ampproject/amphtml/issues/13716',
   },
   {
+    id: 'amp-story-branching',
+    name: 'Allow for the go to action, advance to, and fragment parameter URLs',
+    spec: 'https://github.com/ampproject/amphtml/issues/20083',
+    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/20128',
+  },
+  {
     id: 'no-sync-xhr-in-ads',
     name: 'Disables syncronous XHR requests in 3p iframes.',
     spec: 'TODO',
@@ -281,12 +286,6 @@ const EXPERIMENTS = [
     name: 'Applies a sandbox to ad iframes.',
     spec: 'https://github.com/ampproject/amphtml/issues/14240',
     cleanupIssue: 'TODO',
-  },
-  {
-    id: 'video-service',
-    name: 'Enables new implementation of unified Video Interface services.',
-    spec: 'https://github.com/ampproject/amphtml/issues/13674',
-    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/13955',
   },
   {
     id: 'iframe-messaging',
@@ -347,12 +346,6 @@ const EXPERIMENTS = [
     cleanupIssue: 'https://github.com/ampproject/amphtml/issues/17161',
   },
   {
-    id: 'amp-inputmask',
-    name: 'Enables the amp-inputmask extension enabled through amp-form',
-    spec: 'https://github.com/ampproject/amphtml/issues/12079',
-    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/18630',
-  },
-  {
     id: 'linker-form',
     name: 'Enables form support in linker',
     cleanupIssue: 'https://github.com/ampproject/amphtml/issues/18068',
@@ -397,22 +390,36 @@ const EXPERIMENTS = [
     cleanupIssue: 'https://github.com/ampproject/amphtml/issues/19004',
   },
   {
-    id: 'amp-video-iframe',
-    name: 'Allows the use of the amp-video-iframe component.',
-    spec: 'https://github.com/ampproject/amphtml/issues/16252',
-    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/19563',
+    id: 'amp-auto-lightbox',
+    name: 'Automatically detects images to place in a lightbox.',
+    spec: 'https://github.com/ampproject/amphtml/issues/20395',
+    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/20394',
   },
   {
-    id: 'amp-date-display',
-    name: 'Enables displaying dates',
-    spec: 'https://github.com/ampproject/amphtml/issues/10837',
-    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/XXXXX',
+    id: 'amp-auto-lightbox-carousel',
+    name: 'Automatically detects carousels to group in a lightbox.',
+    spec: 'https://github.com/ampproject/amphtml/issues/20395',
+    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/20394',
   },
   {
-    id: 'amp-list-viewport-resize',
-    name: 'Enables amp-list to resize on viewport resize',
-    spec: 'https://github.com/ampproject/amphtml/issues/19945',
-    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/19945',
+    id: 'fixed-elements-in-lightbox',
+    name: 'Transfer fixed elements in lightboxes for smooth iOS scrolling',
+    spec: 'https://github.com/ampproject/amphtml/issues/20964',
+    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/20965',
+  },
+  {
+    id: 'amp-autocomplete',
+    name: 'AMP Autocomplete provides a set of suggestions to' +
+        ' complete a user query in an input field.',
+    spec: 'https://github.com/ampproject/amphtml/issues/9785',
+    cleanupIssue: 'https://github.com/ampproject/amphtml/issues/21021',
+  },
+  {
+    id: 'inabox-viewport-friendly',
+    name: 'Inabox viewport measures the host window directly if ' +
+        'within friendly iframe',
+    spec: 'https://github.com/ampproject/amphtml/issues/19869',
+    cleanupIssue: 'TODO',
   },
 ];
 
@@ -535,9 +542,29 @@ function updateExperimentRow(experiment) {
  */
 function isExperimentOn_(id) {
   if (id == CANARY_EXPERIMENT_ID) {
-    return getCookie(window, 'AMP_CANARY') == '1';
+    return getCookie(window, 'AMP_CANARY') == AMP_CANARY_COOKIE.CANARY;
+  } else if (id == RC_EXPERIMENT_ID) {
+    return getCookie(window, 'AMP_CANARY') == AMP_CANARY_COOKIE.RC;
   }
   return isExperimentOn(window, /*OK*/id);
+}
+
+/**
+ * Opts in to / out of the "canary" or "rc" runtime types by setting the
+ * AMP_CANARY cookie.
+ * @param {string} cookieState One of AMP_CANARY_COOKIE.{DISABLED|CANARY|RC}
+ */
+function setAmpCanaryCookie_(cookieState) {
+  const validUntil = (cookieState != AMP_CANARY_COOKIE.DISABLED) ?
+    (Date.now() + COOKIE_MAX_AGE_MS) : 0;
+  const cookieOptions = {
+    // Set explicit domain, so the cookie gets sent to sub domains.
+    domain: location.hostname,
+    allowOnProxyOrigin: true,
+  };
+  setCookie(window, 'AMP_CANARY', cookieState, validUntil, cookieOptions);
+  // Reflect default experiment state.
+  self.location.reload();
 }
 
 /**
@@ -556,16 +583,11 @@ function toggleExperiment_(id, name, opt_on) {
 
   showConfirmation_(`${confirmMessage}: "${name}"`, () => {
     if (id == CANARY_EXPERIMENT_ID) {
-      const validUntil = Date.now() + COOKIE_MAX_AGE_MS;
-
-      setCookie(window, 'AMP_CANARY',
-          (on ? '1' : '0'), (on ? validUntil : 0), {
-            // Set explicit domain, so the cookie gets send to sub domains.
-            domain: location.hostname,
-            allowOnProxyOrigin: true,
-          });
-      // Reflect default experiment state.
-      self.location.reload();
+      setAmpCanaryCookie_(
+          on ? AMP_CANARY_COOKIE.CANARY : AMP_CANARY_COOKIE.DISABLED);
+    } else if (id == RC_EXPERIMENT_ID) {
+      setAmpCanaryCookie_(
+          on ? AMP_CANARY_COOKIE.RC : AMP_CANARY_COOKIE.DISABLED);
     } else {
       toggleExperiment(window, id, on);
     }
@@ -605,7 +627,7 @@ function showConfirmation_(message, callback) {
 
 /**
  * Loads the AMP_CONFIG objects from whatever the v0.js is that the
- * user has (depends on whether they opted into canary), so that
+ * user has (depends on whether they opted into canary or RC), so that
  * experiment state can reflect the default activated experiments.
  */
 function getAmpConfig() {

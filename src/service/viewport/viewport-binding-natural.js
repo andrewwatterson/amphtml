@@ -17,10 +17,10 @@
 import {Observable} from '../../observable';
 import {Services} from '../../services';
 import {ViewportBindingDef} from './viewport-binding-def';
+import {computedStyle, px, setImportantStyles} from '../../style';
 import {dev} from '../../log';
 import {isExperimentOn} from '../../experiments';
 import {layoutRectLtwh} from '../../layout-rect';
-import {px, setImportantStyles} from '../../style';
 
 
 const TAG_ = 'Viewport';
@@ -195,14 +195,23 @@ export class ViewportBindingNatural_ {
 
   /** @override */
   getContentHeight() {
-    // The reparented body inside wrapper will have the correct content height.
-    // Body is overflow: hidden so that the scrollHeight include the margins of
-    // body's first and last child.
-    // Body height doesn't include paddingTop on the parent, so we add on the
-    // position of the body from the top of the viewport and subtract the
-    // scrollTop (as position relative to the viewport changes as you scroll).
-    const rect = this.win.document.body./*OK*/getBoundingClientRect();
-    return rect.height + rect.top + this.getScrollTop();
+    // Don't use scrollHeight, since it returns `MAX(viewport_height,
+    // document_height)` (we only want the latter), and it doesn't account
+    // for margins. Also, don't use documentElement's rect height because
+    // there's no workable analog for either ios-embed-* modes.
+    const scrollingElement = this.getScrollingElement();
+    const rect = scrollingElement./*OK*/getBoundingClientRect();
+    const style = computedStyle(this.win, scrollingElement);
+    // The Y-position of any element can be offset by the vertical margin
+    // of its first child, and this is _not_ accounted for in `rect.height`.
+    // This "top gap" causes smaller than expected contentHeight, so calculate
+    // and add it manually. Note that the "top gap" includes any padding-top
+    // on ancestor elements, and the "bottom gap" remains unaddressed.
+    const topGapPlusPadding = rect.top + this.getScrollTop();
+    return rect.height
+        + topGapPlusPadding
+        + parseInt(style.marginTop, 10)
+        + parseInt(style.marginBottom, 10);
   }
 
   /** @override */

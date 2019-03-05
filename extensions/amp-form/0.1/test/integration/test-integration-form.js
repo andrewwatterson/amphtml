@@ -36,7 +36,8 @@ describes.realWin('AmpForm Integration', {
   },
   mockFetch: false,
 }, env => {
-  const baseUrl = 'http://localhost:8081';
+  const {testServerPort} = window.ampTestRuntimeConfig;
+  const baseUrl = `http://localhost:${testServerPort}`;
   let doc;
   let sandbox;
 
@@ -131,8 +132,7 @@ describes.realWin('AmpForm Integration', {
   }
 
   const describeChrome =
-      describe.configure().skipChromeDev()
-          .skipFirefox().skipSafari().skipEdge();
+      describe.configure().skipFirefox().skipSafari().skipEdge();
 
   describeChrome.run('on=submit:form.submit', () => {
     it('should be protected from recursive-submission', () => {

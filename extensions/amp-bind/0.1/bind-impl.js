@@ -21,6 +21,10 @@ import {ChunkPriority, chunk} from '../../../src/chunk';
 import {RAW_OBJECT_ARGS_KEY} from '../../../src/action-constants';
 import {Services} from '../../../src/services';
 import {Signals} from '../../../src/utils/signals';
+import {
+  closestAncestorElementBySelector,
+  iterateCursor,
+} from '../../../src/dom';
 import {debounce} from '../../../src/utils/rate-limit';
 import {deepEquals, getValueForExpr, parseJson} from '../../../src/json';
 import {deepMerge, dict, map} from '../../../src/utils/object';
@@ -31,10 +35,10 @@ import {getMode} from '../../../src/mode';
 import {installServiceInEmbedScope} from '../../../src/service';
 import {invokeWebWorker} from '../../../src/web-worker/amp-worker';
 import {isArray, isFiniteNumber, isObject, toArray} from '../../../src/types';
-import {iterateCursor, waitForBodyPromise} from '../../../src/dom';
 import {reportError} from '../../../src/error';
-import {rewriteAttributesForElement} from '../../../src/purifier';
+import {rewriteAttributesForElement} from '../../../src/url-rewrite';
 import {startsWith} from '../../../src/string';
+import {whenDocumentReady} from '../../../src/document-ready';
 
 const TAG = 'amp-bind';
 
@@ -172,10 +176,10 @@ export class Bind {
           if (opt_win) {
             // In FIE, scan the document node of the iframe window.
             const {document} = opt_win;
-            return waitForBodyPromise(document).then(() => document);
+            return whenDocumentReady(document).then(() => document);
           } else {
             // Otherwise, scan the root node of the ampdoc.
-            return ampdoc.whenBodyAvailable().then(() => ampdoc.getRootNode());
+            return ampdoc.whenReady().then(() => ampdoc.getRootNode());
           }
         })
         .then(root => {
@@ -213,10 +217,10 @@ export class Bind {
    * evaluation unless `opt_skipEval` is false.
    * @param {!JsonObject} state
    * @param {boolean=} opt_skipEval
-   * @param {boolean=} opt_isAmpStateMutation
+   * @param {boolean=} opt_skipAmpState
    * @return {!Promise}
    */
-  setState(state, opt_skipEval, opt_isAmpStateMutation) {
+  setState(state, opt_skipEval, opt_skipAmpState) {
     try {
       deepMerge(this.state_, state, MAX_MERGE_DEPTH);
     } catch (e) {
@@ -231,7 +235,7 @@ export class Bind {
 
     const promise = this.initializePromise_
         .then(() => this.evaluate_())
-        .then(results => this.apply_(results, opt_isAmpStateMutation));
+        .then(results => this.apply_(results, opt_skipAmpState));
 
     if (getMode().test) {
       promise.then(() => {
@@ -266,7 +270,6 @@ export class Bind {
       this.maxNumberOfBindings_ = Math.min(2000,
           Math.max(1000, this.maxNumberOfBindings_ + 500));
 
-      // Signal first mutation (subsequent signals are harmless).
       this.signals_.signal('FIRST_MUTATE');
 
       const scope = dict();
@@ -301,11 +304,12 @@ export class Bind {
     dev().info(TAG, 'setState:', `"${expression}"`);
     this.setStatePromise_ = this.evaluateExpression_(expression, scope)
         .then(result => this.setState(result))
-        .then(() => {
-          this.history_.replace({
-            'data': dict({'amp-bind': this.state_}),
-            'title': this.localWin_.document.title,
-          });
+        .then(() => this.getDataForHistory_())
+        .then(data => {
+          // Don't bother calling History.replace with empty data.
+          if (data) {
+            this.history_.replace(data);
+          }
         });
     return this.setStatePromise_;
   }
@@ -333,12 +337,31 @@ export class Bind {
 
       const onPop = () => this.setState(oldState);
       return this.setState(result)
-          .then(() => {
-            this.history_.push(onPop, {
-              'data': dict({'amp-bind': this.state_}),
-              'title': this.localWin_.document.title,
-            });
+          .then(() => this.getDataForHistory_())
+          .then(data => {
+            this.history_.push(onPop, data);
           });
+    });
+  }
+
+  /**
+   * Returns data that should be saved in browser history on AMP.setState() or
+   * AMP.pushState(). This enables features like restoring browser tabs.
+   * @return {!Promise<?JsonObject>}
+   */
+  getDataForHistory_() {
+    const data = dict({
+      'data': dict({'amp-bind': this.state_}),
+      'title': this.localWin_.document.title,
+    });
+    if (!this.viewer_.isEmbedded()) {
+      // CC doesn't recognize !JsonObject as a subtype of (JsonObject|null).
+      return /** @type {!Promise<?JsonObject>} */ (Promise.resolve(data));
+    }
+    // Only pass state for history updates to trusted viewers, since they
+    // may contain user data e.g. form input.
+    return this.viewer_.isTrustedViewer().then(trusted => {
+      return (trusted) ? data : null;
     });
   }
 
@@ -389,6 +412,7 @@ export class Bind {
       this.scanElement_(el, Number.POSITIVE_INFINITY, bindings);
     });
     const added = bindings.length;
+    // Early-out if there are no elements to add -- just clean up `removed`.
     if (added === 0) {
       return cleanup(0);
     }
@@ -425,8 +449,6 @@ export class Bind {
    * @private
    */
   initialize_(root) {
-    dev().info(TAG, 'init');
-
     // Disallow URL property bindings in AMP4EMAIL.
     const allowUrlProperties = !this.isAmp4Email_();
     this.validator_ = new BindValidator(allowUrlProperties);
@@ -446,10 +468,31 @@ export class Bind {
       if (getMode().development) {
         return this.evaluate_().then(results => this.verify_(results));
       }
-    }).then(() => {
-      this.viewer_.sendMessage('bindReady', undefined);
-      this.dispatchEventForTesting_(BindEvents.INITIALIZE);
-    });
+    }).then(() => this.checkReadiness_(root));
+  }
+
+  /**
+   * Bind is "ready" when its initialization completes _and_ all <amp-state>
+   * elements' local data is parsed and processed (not remote data).
+   * @param {!Node} root
+   * @private
+   */
+  checkReadiness_(root) {
+    const ampStates = root.querySelectorAll('AMP-STATE');
+    if (ampStates.length > 0) {
+      const whenBuilt = toArray(ampStates).map(el => el.whenBuilt());
+      Promise.all(whenBuilt).then(() => this.onReady_());
+    } else {
+      this.onReady_();
+    }
+  }
+
+  /**
+   * @private
+   */
+  onReady_() {
+    this.viewer_.sendMessage('bindReady', undefined);
+    this.dispatchEventForTesting_(BindEvents.INITIALIZE);
   }
 
   /**
@@ -517,7 +560,7 @@ export class Bind {
    * a premutate message from the viewer.
    * @param {string} key
    */
-  makeStateKeyOverridable(key) {
+  addOverridableKey(key) {
     this.overridableKeys_.push(key);
   }
 
@@ -972,16 +1015,15 @@ export class Bind {
   /**
    * Applies expression results to all elements in the document.
    * @param {Object<string, BindExpressionResultDef>} results
-   * @param {boolean=} opt_isAmpStateMutation
+   * @param {boolean=} opt_skipAmpState
    * @return {!Promise}
    * @private
    */
-  apply_(results, opt_isAmpStateMutation) {
+  apply_(results, opt_skipAmpState) {
     const promises = this.boundElements_.map(boundElement => {
-      // If this "apply" round is triggered by an <amp-state> mutation,
-      // ignore updates to <amp-state> element to prevent update cycles.
-      if (opt_isAmpStateMutation
-          && boundElement.element.tagName == 'AMP-STATE') {
+      // If this evaluation is triggered by an <amp-state> mutation, we must
+      // ignore updates to any <amp-state> element to prevent update cycles.
+      if (opt_skipAmpState && boundElement.element.tagName === 'AMP-STATE') {
         return Promise.resolve();
       }
       return this.applyBoundElement_(results, boundElement);
@@ -1076,17 +1118,23 @@ export class Bind {
 
     switch (property) {
       case 'text':
-        element.textContent = String(newValue);
-        // If this is a <title> element in the <head>, update document title.
+        let updateTextContent = true;
+        const stringValue = String(newValue);
+
+        // textContent on <textarea> only works before interaction.
+        if (tag === 'TEXTAREA') {
+          element.value = stringValue;
+          // Don't also update textContent to avoid disrupting focus.
+          updateTextContent = false;
+        }
+        // If <title> element in the <head>, also update the document title.
         if (tag === 'TITLE'
             && element.parentNode === this.localWin_.document.head) {
-          this.localWin_.document.title = String(newValue);
+          this.localWin_.document.title = stringValue;
         }
-        // Setting `textContent` on TEXTAREA element only works if user
-        // has not interacted with the element, therefore `value` also needs
-        // to be set (but `value` is not an attribute on TEXTAREA)
-        if (tag == 'TEXTAREA') {
-          element.value = String(newValue);
+        // Default behavior.
+        if (updateTextContent) {
+          element.textContent = stringValue;
         }
         break;
 
@@ -1115,7 +1163,7 @@ export class Bind {
         // Once the user interacts with these elements, the JS properties
         // underlying these attributes must be updated for the change to be
         // visible to the user.
-        const updateProperty = (tag == 'INPUT' && property in element);
+        const updateProperty = (tag === 'INPUT' && property in element);
         const oldValue = element.getAttribute(property);
 
         let mutated = false;
@@ -1133,6 +1181,11 @@ export class Bind {
             element.removeAttribute(property);
             mutated = true;
           }
+          if (mutated) {
+            // Safari-specific workaround for updating <select> elements
+            // when a child option[selected] attribute changes.
+            this.updateSelectForSafari_(element, property, newValue);
+          }
         } else if (newValue !== oldValue) {
           mutated = this.rewriteAttributes_(
               element, property, String(newValue), updateProperty);
@@ -1144,6 +1197,36 @@ export class Bind {
         break;
     }
     return null;
+  }
+
+  /**
+   * Hopefully we can delete this with Safari 13+.
+   * @param {!Element} element
+   * @param {string} property
+   * @param {BindExpressionResultDef} newValue
+   */
+  updateSelectForSafari_(element, property, newValue) {
+    // We only care about option[selected].
+    if (element.tagName !== 'OPTION' || property !== 'selected') {
+      return;
+    }
+    // We only care if this option was selected, not deselected.
+    if (!newValue) {
+      return;
+    }
+    // Workaround only needed for Safari.
+    if (!Services.platformFor(this.win_).isSafari()) {
+      return;
+    }
+    const select = closestAncestorElementBySelector(element, 'select');
+    if (!select) {
+      return;
+    }
+    // Set corresponding selectedIndex on <select> parent.
+    const index = toArray(select.options).indexOf(element);
+    if (index >= 0) {
+      select.selectedIndex = index;
+    }
   }
 
   /**
@@ -1238,6 +1321,8 @@ export class Bind {
           match = (initialValue === '');
         } else if (expectedValue === false) {
           match = (initialValue === null);
+        } else if (typeof expectedValue === 'number') {
+          match = (Number(initialValue) === expectedValue);
         } else {
           match = (initialValue === expectedValue);
         }

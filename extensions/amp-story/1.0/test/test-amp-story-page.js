@@ -18,12 +18,14 @@ import {AmpDocSingle} from '../../../../src/service/ampdoc-impl';
 import {AmpStoryPage, PageState} from '../amp-story-page';
 import {AmpStoryStoreService} from '../amp-story-store-service';
 import {MediaType} from '../media-pool';
+import {createElementWithAttributes} from '../../../../src/dom';
 import {registerServiceBuilder} from '../../../../src/service';
 
 
 describes.realWin('amp-story-page', {amp: true}, env => {
   let win;
   let element;
+  let gridLayerEl;
   let page;
 
   beforeEach(() => {
@@ -44,7 +46,9 @@ describes.realWin('amp-story-page', {amp: true}, env => {
     story.getImpl = () => Promise.resolve(mediaPoolRoot);
 
     element = win.document.createElement('amp-story-page');
+    gridLayerEl = win.document.createElement('amp-story-grid-layer');
     element.getAmpDoc = () => new AmpDocSingle(win);
+    element.appendChild(gridLayerEl);
     story.appendChild(element);
     win.document.body.appendChild(story);
 
@@ -117,7 +121,7 @@ describes.realWin('amp-story-page', {amp: true}, env => {
   it('should perform media operations when state becomes active', done => {
     const videoEl = win.document.createElement('video');
     videoEl.setAttribute('src', 'https://example.com/video.mp3');
-    element.appendChild(videoEl);
+    gridLayerEl.appendChild(videoEl);
 
     let mediaPoolMock;
 
@@ -184,7 +188,7 @@ describes.realWin('amp-story-page', {amp: true}, env => {
   it('should pause/rewind media when state becomes not active', done => {
     const videoEl = win.document.createElement('video');
     videoEl.setAttribute('src', 'https://example.com/video.mp3');
-    element.appendChild(videoEl);
+    gridLayerEl.appendChild(videoEl);
 
     let mediaPoolMock;
 
@@ -224,7 +228,7 @@ describes.realWin('amp-story-page', {amp: true}, env => {
   it('should pause media when state becomes paused', done => {
     const videoEl = win.document.createElement('video');
     videoEl.setAttribute('src', 'https://example.com/video.mp3');
-    element.appendChild(videoEl);
+    gridLayerEl.appendChild(videoEl);
 
     let mediaPoolMock;
 
@@ -247,6 +251,63 @@ describes.realWin('amp-story-page', {amp: true}, env => {
             mediaPoolMock.verify();
             done();
           });
+        });
+  });
+
+  it('should find pageIds in a goToPage action', () => {
+    const actionButton = createElementWithAttributes(
+        win.document,
+        'button',
+        {'id': 'actionButton',
+          'on': 'tap:story.goToPage(id=pageId)'});
+    element.appendChild(actionButton);
+    page.buildCallback();
+
+    return page.layoutCallback()
+        .then(() => {
+          const actions = page.actions_();
+
+          expect(actions.length).to.be.equal(1);
+          expect(actions[0]).to.be.equal('pageId');
+        });
+  });
+
+  it('should find pageIds in a goToPage action with multiple actions', () => {
+
+    const multipleActionButton = createElementWithAttributes(
+        win.document,
+        'button',
+        {'id': 'actionButton',
+          'on': 'tap:story.goToPage(id=pageId),foo.bar(baz=quux)'});
+    element.appendChild(multipleActionButton);
+    page.buildCallback();
+
+    return page.layoutCallback()
+        .then(() => {
+          const actions = page.actions_();
+
+          expect(actions.length).to.be.equal(1);
+          expect(actions[0]).to.be.equal('pageId');
+        });
+  });
+
+  it('should find pageIds in a goToPage action with multiple events', () => {
+
+    const multipleEventsButton = createElementWithAttributes(
+        win.document,
+        'button',
+        {'id': 'actionButton',
+          'on':
+            'tap:story.goToPage(id=pageId);action:foo.bar(baz=quux'});
+    element.appendChild(multipleEventsButton);
+    page.buildCallback();
+
+    return page.layoutCallback()
+        .then(() => {
+          const actions = page.actions_();
+
+          expect(actions.length).to.be.equal(1);
+          expect(actions[0]).to.be.equal('pageId');
         });
   });
 });

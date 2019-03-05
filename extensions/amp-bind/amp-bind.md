@@ -1,4 +1,15 @@
-# <a name="amp-bind"></a> `amp-bind`
+---
+$category@: dynamic-content
+formats:
+  - websites
+  - email
+  - ads
+teaser:
+  text: Allows elements to mutate in response to user actions or data changes via data binding and simple JS-like expressions.
+---
+# amp-bind
+
+Adds custom interactivity with data binding and expressions.
 
 <!---
 Copyright 2016 The AMP HTML Authors. All Rights Reserved.
@@ -19,10 +30,6 @@ limitations under the License.
 [TOC]
 
 <table>
-  <tr>
-    <td class="col-fourty"><strong>Description</strong></td>
-    <td>Adds custom interactivity with data binding and expressions.</td>
-  </tr>
   <tr>
     <td class="col-fourty"><strong>Required Script</strong></td>
     <td>
@@ -349,7 +356,7 @@ encodeURIComponent('Hello world')</pre>
 `amp-bind` expression fragments can be reused by defining an `amp-bind-macro`. The `amp-bind-macro` element allows you to define an expression that takes zero or more arguments and references the current state. A macro can be invoked like a function by referencing its `id` attribute value from anywhere in your doc.
 
 ```html
-<amp-bind-macro id="circleArea" arguments="radius" expression="3.14 * radius * radius" />
+<amp-bind-macro id="circleArea" arguments="radius" expression="3.14 * radius * radius"></amp-bind-macro>
 
 <div>
   The circle has an area of <span [text]="circleArea(myCircle.radius)">0</span>.
@@ -360,7 +367,7 @@ A macro can also call other macros <i>defined before itself</i>. A macro cannot 
 
 ### Bindings
 
-A **binding** is a special attribute of the form `[property]` that links an element's property to an [expression](#expressions).
+A **binding** is a special attribute of the form `[property]` that links an element's property to an [expression](#expressions). An alternative, XML-compatible syntax can also be used in the form of `data-amp-bind-property`.
 
 When the **state** changes, expressions are re-evaluated and the bound elements' properties are updated with the new expression results.
 
@@ -399,12 +406,12 @@ When the **state** changes, expressions are re-evaluated and the bound elements'
   </tr>
 </table>
 
-Notes on Bindings:
+Notes on bindings:
 
 - For security reasons, binding to `innerHTML` is disallowed.
 - All attribute bindings are sanitized for unsafe values (e.g., `javascript:`).
 - Boolean expression results toggle boolean attributes. For example: `<amp-video [controls]="expr"...>`. When `expr` evaluates to `true`, the `<amp-video>` element has the `controls` attribute. When `expr` evaluates to `false`, the `controls` attribute is removed.
-
+- Bracket characters `[` and `]` in attribute names can be problematic when writing XML (e.g. XHTML, JSX) or writing attributes via DOM APIs. In these cases, use the alternative syntax `data-amp-bind-x="foo"` instead of `[x]="foo"`.
 
 #### Element-specific attributes
 
@@ -644,25 +651,25 @@ AMP batches XMLHttpRequests (XHRs) to JSON endpoints, that is, you can use a sin
 
 #### Attributes
 
-**src**
-
-The URL of the remote endpoint that will return the JSON that will update this `amp-state`. This must be a CORS HTTP service.
-
-The `src` attribute allows all standard URL variable substitutions. See the [Substitutions Guide](../../spec/amp-var-substitutions.md) for more info.
-
-{% call callout('Important', type='caution') %}
-The endpoint must implement the requirements specified in the [CORS Requests in AMP](https://www.ampproject.org/docs/fundamentals/amp-cors-requests) spec.
-{% endcall %}
-
-
-**credentials** (optional)
-
-Defines a `credentials` option as specified by the [Fetch API](https://fetch.spec.whatwg.org/).
-
-* Supported values: `omit`, `include`
-* Default: `omit`
-
-To send credentials, pass the value of `include`. If this value is set, the response must follow the [AMP CORS security guidelines](https://www.ampproject.org/docs/fundamentals/amp-cors-requests#cors-security-in-amp).
+<table>
+  <tr>
+    <td width="40%"><strong>src</strong></td>
+    <td><p>The URL of the remote endpoint that will return the JSON that will update this <code>amp-state</code>. This must be a CORS HTTP service.</p>
+<p>The <code>src</code> attribute allows all standard URL variable substitutions. See the <a href="../../spec/amp-var-substitutions.md">Substitutions Guide</a> for more info.</p>
+<p>{% call callout('Important', type='caution') %}
+  The endpoint must implement the requirements specified in the <a href="https://www.ampproject.org/docs/fundamentals/amp-cors-requests">CORS Requests in AMP</a> spec.
+  {% endcall %}</p></td>
+  </tr>
+  <tr>
+    <td width="40%"><strong>credentials (optional)</strong></td>
+    <td><p>Defines a <code>credentials</code> option as specified by the <a href="https://fetch.spec.whatwg.org/">Fetch API</a>.</p>
+<ul>
+  <li>Supported values: `omit`, `include`</li>
+  <li>Default: `omit`</li>
+</ul>
+<p>To send credentials, pass the value of <code>include</code>. If this value is set, the response must follow the <a href="https://www.ampproject.org/docs/fundamentals/amp-cors-requests#cors-security-in-amp">AMP CORS security guidelines</a>.</p></td>
+  </tr>
+</table>
 
 ### Deep-merge with `AMP.setState()`
 

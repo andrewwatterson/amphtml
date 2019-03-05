@@ -76,6 +76,11 @@ export default /** @const {!LocalizedStringBundleDef} */ ({
     description: 'Label for a link to documentation on how AMP links are ' +
         'handled.',
   },
+  [LocalizedStringId.AMP_STORY_PAGE_ATTACHMENT_OPEN_LABEL]: {
+    string: 'Swipe up',
+    description: 'Label for a button to open a drawer containing additional ' +
+        'content via a "swipe up" user gesture.',
+  },
   [LocalizedStringId.AMP_STORY_PAGE_PLAY_VIDEO]: {
     string: 'Play video',
     description: 'Label for a button to play the video visible on the page.',
@@ -155,15 +160,26 @@ export default /** @const {!LocalizedStringBundleDef} */ ({
     description: 'Button label for the share target that shares a link via ' +
         'WhatsApp.',
   },
-  [LocalizedStringId.AMP_STORY_SYSTEM_LAYER_SHARE_WIDGET_LABEL]: {
-    string: 'Share',
-    description: 'Label for the expandable share widget shown in the ' +
-        'desktop UI.',
+  [LocalizedStringId.AMP_STORY_TOOLTIP_EXPAND_TWEET]: {
+    string: 'Expand Tweet',
+    description: 'Label in the tooltip text for when a Twitter embed is ' +
+        'expandable.',
+  },
+  [LocalizedStringId.AMP_STORY_WARNING_DESKTOP_HEIGHT_SIZE_TEXT]: {
+    string: 'Expand the height of your window to view this experience',
+    description: 'Text for a warning screen that informs the user that ' +
+        'stories are only supported in taller browser windows.',
   },
   [LocalizedStringId.AMP_STORY_WARNING_DESKTOP_SIZE_TEXT]: {
-    string: 'Expand your window to view this experience',
+    string: 'Expand both the height and width of your window to view this ' +
+        'experience',
     description: 'Text for a warning screen that informs the user that ' +
         'stories are only supported in larger browser windows.',
+  },
+  [LocalizedStringId.AMP_STORY_WARNING_DESKTOP_WIDTH_SIZE_TEXT]: {
+    string: 'Expand the width of your window to view this experience',
+    description: 'Text for a warning screen that informs the user that ' +
+        'stories are only supported in wider browser windows.',
   },
   [LocalizedStringId.AMP_STORY_WARNING_EXPERIMENT_DISABLED_TEXT]: {
     string: 'You must enable the amp-story experiment to view this content.',

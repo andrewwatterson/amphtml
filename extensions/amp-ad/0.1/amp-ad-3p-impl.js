@@ -16,7 +16,7 @@
 
 import {
   ADSENSE_MCRSPV_TAG,
-  getMatchedContentResponsiveHeight,
+  getMatchedContentResponsiveHeightAndUpdatePubParams,
 } from '../../../ads/google/utils';
 import {AmpAdUIHandler} from './amp-ad-ui';
 import {AmpAdXOriginIframeHandler} from './amp-ad-xorigin-iframe-handler';
@@ -343,10 +343,10 @@ export class AmpAd3PImpl extends AMP.BaseElement {
     const consentPolicyId = super.getConsentPolicy();
     const isConsentV2Experiment = isExperimentOn(this.win, 'amp-consent-v2');
     const consentStringPromise = (consentPolicyId && isConsentV2Experiment)
-      ? getConsentPolicyInfo(this.getAmpDoc(), consentPolicyId)
+      ? getConsentPolicyInfo(this.element, consentPolicyId)
       : Promise.resolve(null);
     const sharedDataPromise = consentPolicyId
-      ? getConsentPolicySharedData(this.getAmpDoc(), consentPolicyId)
+      ? getConsentPolicySharedData(this.element, consentPolicyId)
       : Promise.resolve(null);
 
     this.layoutPromise_ = Promise.all([
@@ -355,6 +355,15 @@ export class AmpAd3PImpl extends AMP.BaseElement {
       sharedDataPromise,
       consentStringPromise,
     ]).then(consents => {
+
+      // Use JsonObject to preserve field names so that ampContext can access
+      // values with name
+      // ampcontext.js and this file are compiled in different compilation unit
+
+      // Note: Field names can by perserved by using JsonObject, or by adding
+      // perserved name to extern. We are doing both right now.
+      // Please also add new introduced variable
+      // name to the extern list.
       const opt_context = dict({
         'clientId': consents[0] || null,
         'container': this.container_,
@@ -412,7 +421,7 @@ export class AmpAd3PImpl extends AMP.BaseElement {
   getConsentState() {
     const consentPolicyId = super.getConsentPolicy();
     return consentPolicyId
-      ? getConsentPolicyState(this.getAmpDoc(), consentPolicyId)
+      ? getConsentPolicyState(this.element, consentPolicyId)
       : Promise.resolve(null);
   }
 
@@ -451,8 +460,9 @@ export class AmpAd3PImpl extends AMP.BaseElement {
   getFullWidthHeight_(width, maxHeight) {
     // TODO(google a4a eng): remove this once adsense switches fully to
     // fast fetch.
-    if (this.element.getAttribute('data-auto-format') == ADSENSE_MCRSPV_TAG) {
-      return getMatchedContentResponsiveHeight(width);
+    if (this.element.getAttribute('data-auto-format') === ADSENSE_MCRSPV_TAG) {
+      return getMatchedContentResponsiveHeightAndUpdatePubParams(
+          width, this.element);
     }
     return clamp(Math.round(width / this.config.fullWidthHeightRatio),
         MIN_FULL_WIDTH_HEIGHT, maxHeight);

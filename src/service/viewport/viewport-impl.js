@@ -27,7 +27,7 @@ import {
 } from './viewport-binding-ios-embed-wrapper';
 import {ViewportBindingNatural_} from './viewport-binding-natural';
 import {VisibilityState} from '../../visibility-state';
-import {closestBySelector, isIframed} from '../../dom';
+import {closestAncestorElementBySelector, isIframed} from '../../dom';
 import {dev, devAssert} from '../../log';
 import {dict} from '../../utils/object';
 import {getFriendlyIframeEmbedOptional} from '../../friendly-iframe-embed';
@@ -529,7 +529,7 @@ export class Viewport {
     pos = 'top') {
 
     return this.getScrollingContainerFor_(element).then(parent =>
-      this.animateScrollIntoViewInternal_(
+      this.animateScrollWithinParent(
           element,
           parent,
           dev().assertNumber(duration),
@@ -544,9 +544,8 @@ export class Viewport {
    * @param {string} curve
    * @param {string} pos (takes one of 'top', 'bottom', 'center')
    * @return {!Promise}
-   * @private
    */
-  animateScrollIntoViewInternal_(element, parent, duration, curve, pos) {
+  animateScrollWithinParent(element, parent, duration, curve, pos) {
     const elementRect = this.binding_.getLayoutRect(element);
 
     const {height: parentHeight} = this.isScrollingElement_(parent) ?
@@ -612,7 +611,7 @@ export class Viewport {
    */
   getScrollingContainerFor_(element) {
     return this.vsync_.measurePromise(() =>
-      closestBySelector(element, '.i-amphtml-scrollable') ||
+      closestAncestorElementBySelector(element, '.i-amphtml-scrollable') ||
         this.binding_.getScrollingElement());
   }
 
@@ -696,17 +695,18 @@ export class Viewport {
 
   /**
    * Instruct the viewport to enter lightbox mode.
-   * Requesting element is necessary to be able to enter lightbox mode under FIE
-   * cases.
-   * @param {!Element=} opt_requestingElement
+   * @param {!Element=} opt_requestingElement Must be provided to be able to
+   *     enter lightbox mode under FIE cases.
+   * @param {!Promise=} opt_onComplete Optional promise that's resolved when
+   *     the caller finishes opening the lightbox e.g. transition animations.
    * @return {!Promise}
    */
-  enterLightboxMode(opt_requestingElement) {
+  enterLightboxMode(opt_requestingElement, opt_onComplete) {
     this.viewer_.sendMessage(
         'requestFullOverlay', dict(), /* cancelUnsent */ true);
 
     this.enterOverlayMode();
-    this.hideFixedLayer();
+    this.fixedLayer_.enterLightbox(opt_requestingElement, opt_onComplete);
 
     if (opt_requestingElement) {
       this.maybeEnterFieLightboxMode(
@@ -718,16 +718,15 @@ export class Viewport {
 
   /**
    * Instruct the viewport to leave lightbox mode.
-   * Requesting element is necessary to be able to enter lightbox mode under FIE
-   * cases.
-   * @param {!Element=} opt_requestingElement
+   * @param {!Element=} opt_requestingElement Must be provided to be able to
+   *     enter lightbox mode under FIE cases.
    * @return {!Promise}
    */
   leaveLightboxMode(opt_requestingElement) {
     this.viewer_.sendMessage(
         'cancelFullOverlay', dict(), /* cancelUnsent */ true);
 
-    this.showFixedLayer();
+    this.fixedLayer_.leaveLightbox();
     this.leaveOverlayMode();
 
     if (opt_requestingElement) {
@@ -883,20 +882,6 @@ export class Viewport {
    */
   hasScrolled() {
     return this.scrollCount_ > 0;
-  }
-
-  /**
-   * Hides the fixed layer.
-   */
-  hideFixedLayer() {
-    this.fixedLayer_.setVisible(false);
-  }
-
-  /**
-   * Shows the fixed layer.
-   */
-  showFixedLayer() {
-    this.fixedLayer_.setVisible(true);
   }
 
   /**

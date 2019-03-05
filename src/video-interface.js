@@ -157,6 +157,12 @@ export class VideoInterface {
    * @return {boolean}
    */
   isFullscreen() {}
+
+  /**
+   * Seeks the video to a specified time.
+   * @param {number} unusedTimeSeconds
+   */
+  seekTo(unusedTimeSeconds) {}
 }
 
 
@@ -484,4 +490,23 @@ export let VideoOrBaseElementDef;
  */
 export function isDockable(element) {
   return element.hasAttribute(VideoAttributes.DOCK);
+}
+
+
+/** @enum {string} */
+export const VideoServiceSignals = {
+  USER_INTERACTED: 'user-interacted',
+  AUTOPLAY_DELEGATED: 'autoplay-delegated',
+};
+
+
+/** @param {!AmpElement|!VideoOrBaseElementDef} video */
+export function delegateAutoplay(video) {
+  video.signals().signal(VideoServiceSignals.AUTOPLAY_DELEGATED);
+}
+
+
+/** @param {!AmpElement|!VideoOrBaseElementDef} video */
+export function userInteractedWith(video) {
+  video.signals().signal(VideoServiceSignals.USER_INTERACTED);
 }

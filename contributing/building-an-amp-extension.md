@@ -7,7 +7,7 @@ extensions. If you'd like to add an extension to support your company
 video player, rich embed or just a general UI component like a star
 rating viewer, you'd do this by building an extension.
 
-- [A word on contributing](#a-word-on-contributing)
+- [Getting started](#getting-started)
 - [Naming](#naming)
 - [Directory structure](#directory-structure)
 - [Extend AMP.BaseElement](#extend-ampbaseelement)
@@ -27,17 +27,11 @@ rating viewer, you'd do this by building an extension.
 - [Type checking](#type-checking)
 - [Example PRs](#example-prs)
 
-# Checklist for creating an experiment
+## Getting started
 
--[] Create your directory structure.
--[] Create an experiment.
--[] Check previous PRs of past experiments to model your extension after, if applicable.
+This document describes how to create a new AMP extension, which is one of the most common ways of adding a new feature to AMP.
 
-## A word on contributing
-
-We suggest that you open an "Intent to Implement" GitHub issue for your
-extension as early as you can, so that we can advise you on next steps or provide early feedback on the implementation or naming. For details, see [CONTRIBUTING.md
-for more details](../CONTRIBUTING.md#phase-concept-design).
+Before diving into the details on creating a new AMP extension, please familiarize yourself with the [general process for contributing code and features to AMP](https://github.com/ampproject/amphtml/blob/master/contributing/contributing-code.md).  Since you are adding a new extension you will likely need to follow the [process for making a significant change](https://github.com/ampproject/amphtml/blob/master/contributing/contributing-code.md#process-for-significant-changes), including filing an ["Intent to Implement" issue](https://github.com/ampproject/amphtml/labels/INTENT%20TO%20IMPLEMENT) and finding a reviewer before you start significant development.
 
 ## Naming
 
@@ -119,7 +113,9 @@ class AmpMyElement extends AMP.BaseElement {
   }
 }
 
-AMP.registerElement('amp-my-element', AmpMyElement, CSS);
+AMP.extension('amp-my-element', '0.1', AMP => {
+  AMP.registerElement('amp-my-element', AmpMyElement, CSS);
+});
 ```
 
 ### BaseElement callbacks
@@ -293,7 +289,9 @@ AMP; all AMP extensions are prefixed with `amp-`. This is where you
 tell AMP which class to use for this tag name and which CSS to load.
 
 ```javascript
-AMP.registerElement('amp-carousel', CarouselSelector, CSS);
+AMP.extension('amp-carousel', '0.1', AMP => {
+  AMP.registerElement('amp-carousel', CarouselSelector, CSS);
+});
 ```
 
 ## Actions and events
@@ -661,7 +659,8 @@ And then protecting your code with a check `isExperimentOn(win,
 'amp-my-element')` and only execute your code when it is on.
 
 ```javascript
-import {isExperimentOn} from '../src/experiments';
+import {isExperimentOn} from '../../../src/experiments';
+import {userAssert} from '../../../src/log';
 
 /** @const */
 const EXPERIMENT = 'amp-my-element';
@@ -685,25 +684,23 @@ Class AmpMyElement extends AMP.BaseElement {
 
   /** @override */
   buildCallback() {
-    if (!isExperimentOn(this.getWin(), EXPERIMENT)) {
-      user.warn('Experiment %s is not turned on.', EXPERIMENT);
-      return;
-    }
+    userAssert(isExperimentOn(this.win, 'amp-my-element'),
+        `Experiment ${EXPERIMENT} is not turned on.`);
     // get attributes, assertions of values, assign instance variables.
     // build lightweight dom and append to this.element.
   }
 
   /** @override */
   layoutCallback() {
-    if (!isExperimentOn(this.getWin(), EXPERIMENT)) {
-      user.warn('Experiment %s is not turned on.', EXPERIMENT);
-      return;
-    }
+    userAssert(isExperimentOn(this.win, 'amp-my-element'),
+        `Experiment ${EXPERIMENT} is not turned on.`);
     // actually load your resource or render more expensive resources.
   }
 }
 
-AMP.registerElement('amp-my-element', AmpMyElement, CSS);
+AMP.extension('amp-my-element', '0.1', AMP => {
+  AMP.registerElement('amp-my-element', AmpMyElement, CSS);
+});
 ```
 
 ### Enabling and removing your experiment

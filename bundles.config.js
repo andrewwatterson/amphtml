@@ -47,6 +47,7 @@ exports.extensionBundles = [
   },
   {name: 'amp-access-poool', version: '0.1', type: TYPES.MISC},
   {name: 'amp-accordion', version: '0.1', type: TYPES.MISC},
+  {name: 'amp-action-macro', version: '0.1', type: TYPES.MISC},
   {name: 'amp-ad', version: '0.1', options: {hasCss: true}, type: TYPES.AD},
   {name: 'amp-ad-custom', version: '0.1', type: TYPES.AD},
   {name: 'amp-ad-network-adsense-impl', version: '0.1', type: TYPES.AD},
@@ -75,12 +76,24 @@ exports.extensionBundles = [
   },
   {name: 'amp-audio', version: '0.1', type: TYPES.MEDIA},
   {name: 'amp-auto-ads', version: '0.1', type: TYPES.AD},
+  {
+    name: 'amp-autocomplete',
+    version: '0.1',
+    options: {hasCss: true},
+    type: TYPES.MISC,
+  },
+  {name: 'amp-auto-lightbox', version: '0.1', type: TYPES.MISC},
+  {
+    name: 'amp-base-carousel',
+    version: '0.1',
+    options: {hasCss: true},
+    type: TYPES.MISC,
+  },
   {name: 'amp-beopinion', version: '0.1', type: TYPES.MISC},
   {name: 'amp-bind', version: '0.1', type: TYPES.MISC},
   {
     name: 'amp-bodymovin-animation',
     version: '0.1',
-    options: {hasCss: false},
     type: TYPES.MEDIA,
   },
   {name: 'amp-brid-player', version: '0.1', type: TYPES.MEDIA},
@@ -162,7 +175,14 @@ exports.extensionBundles = [
     type: TYPES.MISC,
   },
   {name: 'amp-imgur', version: '0.1', type: TYPES.MEDIA},
-  {name: 'amp-inputmask', version: '0.1', type: TYPES.MISC},
+  {
+    name: 'amp-inputmask',
+    version: '0.1',
+    type: TYPES.MISC,
+    postPrepend: [
+      'third_party/inputmask/bundle.js',
+    ],
+  },
   {
     name: 'amp-instagram',
     version: '0.1',
@@ -230,6 +250,7 @@ exports.extensionBundles = [
   {
     name: 'amp-script',
     version: '0.1',
+    options: {hasCss: true},
     type: TYPES.MISC,
   },
   {name: 'amp-share-tracking', version: '0.1', type: TYPES.MISC},
@@ -277,6 +298,7 @@ exports.extensionBundles = [
         'amp-story-tooltip',
         'amp-story-consent',
         'amp-story-hint',
+        'amp-story-page-attachment-header',
         'amp-story-unsupported-browser-layer',
         'amp-story-viewport-warning-layer',
         'amp-story-info-dialog',
@@ -385,6 +407,7 @@ exports.extensionBundles = [
     ],
   },
   {name: 'amp-google-vrview-image', version: '0.1', type: TYPES.MISC},
+  {name: 'amp-viewer-assistance', version: '0.1', type: TYPES.MISC},
   {
     name: 'amp-viewer-integration',
     version: '0.1',
@@ -413,24 +436,13 @@ exports.extensionBundles = [
     version: '0.1',
     type: TYPES.MEDIA,
   },
-  {
-    name: 'amp-video-service',
-    version: '0.1',
-    options: {
-      // `amp-video-service` provides analytics and autoplay for all videos. We
-      // need those to be available asap. This service replaces a runtime-level
-      // provider, so loadPriority is set to high in lieu of delivering it as
-      // part of the core binary.
-      loadPriority: 'high',
-    },
-    type: TYPES.MISC,
-  },
   {name: 'amp-viqeo-player', version: '0.1', type: TYPES.MEDIA},
   {name: 'amp-vk', version: '0.1', type: TYPES.MISC},
   {name: 'amp-yotpo', version: '0.1', type: TYPES.MISC},
   {name: 'amp-youtube', version: '0.1', type: TYPES.MEDIA},
   {name: 'amp-mowplayer', version: '0.1', type: TYPES.MEDIA},
   {name: 'amp-powr-player', version: '0.1', type: TYPES.MEDIA},
+  {name: 'amp-mraid', version: '0.1', type: TYPES.AD},
 ];
 
 exports.aliasBundles = [

@@ -25,7 +25,7 @@ import {parseJson} from '../../../src/json';
  *   - NOT be reused; to deprecate an ID, comment it out and prefix its key with
  *     the string "DEPRECATED_"
  *
- * Next ID: 35
+ * Next ID: 39
  *
  * @const @enum {string}
  */
@@ -44,6 +44,7 @@ export const LocalizedStringId = {
   AMP_STORY_DOMAIN_DIALOG_HEADING_LINK: '26',
   AMP_STORY_HINT_UI_NEXT_LABEL: '2',
   AMP_STORY_HINT_UI_PREVIOUS_LABEL: '3',
+  AMP_STORY_PAGE_ATTACHMENT_OPEN_LABEL: '35',
   AMP_STORY_PAGE_PLAY_VIDEO: '34',
   AMP_STORY_SHARING_CLIPBOARD_FAILURE_TEXT: '4',
   AMP_STORY_SHARING_CLIPBOARD_SUCCESS_TEXT: '5',
@@ -58,14 +59,17 @@ export const LocalizedStringId = {
   AMP_STORY_SHARING_PROVIDER_NAME_TUMBLR: '14',
   AMP_STORY_SHARING_PROVIDER_NAME_TWITTER: '15',
   AMP_STORY_SHARING_PROVIDER_NAME_WHATSAPP: '16',
-  AMP_STORY_SYSTEM_LAYER_SHARE_WIDGET_LABEL: '17',
+  AMP_STORY_TOOLTIP_EXPAND_TWEET: '36',
+  AMP_STORY_WARNING_DESKTOP_HEIGHT_SIZE_TEXT: '37',
   AMP_STORY_WARNING_DESKTOP_SIZE_TEXT: '18',
+  AMP_STORY_WARNING_DESKTOP_WIDTH_SIZE_TEXT: '38',
   AMP_STORY_WARNING_EXPERIMENT_DISABLED_TEXT: '19',
   AMP_STORY_WARNING_LANDSCAPE_ORIENTATION_TEXT: '20',
   AMP_STORY_WARNING_UNSUPPORTED_BROWSER_TEXT: '21',
   // DEPRECATED_AMP_STORY_EXPERIMENT_ENABLE_BUTTON_LABEL: '0',
   // DEPRECATED_AMP_STORY_EXPERIMENT_ENABLED_TEXT: '1',
   // DEPRECATED_AMP_STORY_CONSENT_DISMISS_DIALOG_BUTTON_LABEL: '24',
+  // DEPRECATED_AMP_STORY_SYSTEM_LAYER_SHARE_WIDGET_LABEL: '17',
 };
 
 
@@ -129,10 +133,10 @@ function findLocalizedString(localizedStringBundles, languageCodes,
 
   languageCodes.some(languageCode => {
     const localizedStringBundle = localizedStringBundles[languageCode];
-    if (localizedStringBundle && localizedStringBundle[localizedStringId] &&
-        localizedStringBundle[localizedStringId].string) {
-      localizedString = localizedStringBundle[localizedStringId].string;
-      return true;
+    if (localizedStringBundle && localizedStringBundle[localizedStringId]) {
+      localizedString = localizedStringBundle[localizedStringId].string ||
+          localizedStringBundle[localizedStringId].fallback;
+      return !!localizedString;
     }
 
     return false;
@@ -172,6 +176,8 @@ export function createPseudoLocale(localizedStringBundle, localizationFn) {
     /** @type {!LocalizedStringId} */ (localizedStringIdAsStr);
     pseudoLocaleStringBundle[localizedStringId].string =
         localizationFn(localizedStringBundle[localizedStringId].string);
+    pseudoLocaleStringBundle[localizedStringId].fallback =
+        localizationFn(localizedStringBundle[localizedStringId].fallback);
   });
 
   return pseudoLocaleStringBundle;
