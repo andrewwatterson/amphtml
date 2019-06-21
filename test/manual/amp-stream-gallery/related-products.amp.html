@@ -1,0 +1,238 @@
+<!doctype html>
+<html ⚡>
+<head>
+  <meta charset="utf-8">
+  <title>GLAMP</title>
+  <link rel="canonical" href="amps.html" >
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <script async custom-element="amp-stream-gallery" src="https://cdn.ampproject.org/v0/amp-stream-gallery-0.1.js"></script>
+  <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+  <style amp-custom>
+    body {
+      font-family: Montserrat, sans-serif;
+      --beige: #F6E3D1;
+      --brown: #CC8038;
+      --gray: #555555;
+    }
+
+    .header {
+      background-color: var(--brown);
+      height: 48px;
+      padding: 11px 25px;
+      box-shadow: 0px 0px 6px 0px rgba(0,0,0,.3);
+    }
+
+    .page-content {
+      padding: 25px;
+    }
+
+    h2 {
+      color: var(--brown);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -.05em;
+      margin: 0; padding: 0;
+      margin-bottom: 16px;
+    }
+
+    .logo {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -.1em;
+      display: inline-block;
+      color: rgba(255,255,255,.6);
+    }
+
+    .slogan {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: -.1em;
+      display: inline-block;
+      color: white;
+      margin-left: -16px;
+    }
+
+    .product-details {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 36px;
+    }
+
+    .product-description {
+      color: var(--gray);
+      font-weight: 400;
+      margin-right: 25px;
+    }
+
+    .buy-button {
+      background-color: var(--brown);
+      box-shadow: 10px 10px 0px 0px var(--beige);
+      flex: 0 0 110px;
+      padding: 12px 24px;
+      box-sizing: border-box;
+
+      color: white;
+      font-weight: 800;
+      letter-spacing: -.05em;
+      text-align: center;
+    }
+
+    .buy-cta {
+      font-size: 28px;
+      border-bottom: 1px solid white;
+      padding-bottom: 12px;
+    }
+
+    .buy-price {
+      padding-top: 12px;
+      font-size: 20px;
+    }
+
+    amp-base-carousel {
+      margin-right: -25px;
+      margin-bottom: 36px;
+    }
+
+    [slot="next-arrow"], [slot="prev-arrow"] {
+      display: none;
+    }
+
+    .related-product-wrapper {
+      width: 165px;
+      height: 200px;
+    }
+
+    .related-product-wrapper:last-of-type {
+      width: 150px;
+    }
+
+    .related-product {
+      width: 140px;
+      height: 190px;
+      background-color: var(--beige);
+      box-shadow: 10px 10px 0px 0px var(--brown);
+      margin-bottom: 10px;
+    }
+
+    .related-product-title {
+      color: var(--gray);
+      padding: 6px 10px;
+      font-size: 14px;
+      letter-spacing: -0.05em;
+    }
+
+    .related-product-title b {
+      font-size: 18px;
+      font-weight: bold;
+      display: block;
+    }
+
+    .footer {
+      background-color: var(--beige);
+      padding: 35px 25px;
+    }
+
+    .footer ul, .footer li {
+      padding: 0; margin: 0;
+    }
+
+    .footer ul {
+      list-style: none;
+      width: 150px;
+      display: inline-block;
+      color: var(--gray);
+      font-size: 12px;
+    }
+
+    .footer li {
+      padding-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">GLAMP</div>
+    <div class="slogan">treat yourself</div>
+  </div>
+
+  <amp-img src="./img/makeup/2.jpg" layout="responsive" width="4460" height="2975"></amp-img>
+
+  <div class="page-content">
+    <h2>The Deets.</h2>
+
+    <div class="product-details">
+      <div class="product-description">
+        This product evens out discoloration and leaves your face looking toned, even, and dewy. The breathable, ultra thin formula adapts to the skin, making application simple.
+        <br /><br />
+        1.4oz/35g
+      </div>
+      <div class="buy-button">
+        <div class="buy-cta">Buy Now</div>
+        <div class="buy-price">$23</div>
+      </div>
+    </div>
+
+    <h2>Related Products.</h2>
+    <amp-stream-gallery
+      layout="responsive"
+      height=2
+      width=3
+      min-item-width="160"
+      max-item-width="180"
+    >
+      <div class="related-product-wrapper">
+        <div class="related-product">
+          <amp-img src="./img/makeup/small-1.png" height="112" width="140"></amp-img>
+          <div class="related-product-title">
+            <b>The Ultimate Travel Set.</b>
+            $42
+          </div>
+        </div>
+      </div>
+      <div class="related-product-wrapper">
+        <div class="related-product">
+          <amp-img src="./img/makeup/small-3.png" height="112" width="140"></amp-img>
+          <div class="related-product-title">
+            <b>At First Blush Deluxe.</b>
+            $11
+          </div>
+        </div>
+      </div>
+      <div class="related-product-wrapper">
+        <div class="related-product">
+          <amp-img src="./img/makeup/small-2.png" height="112" width="140"></amp-img>
+          <div class="related-product-title">
+            <b>Our Best Brush Yet.</b>
+            $14
+          </div>
+        </div>
+      </div>
+      <div class="related-product-wrapper">
+        <div class="related-product">
+          <amp-img src="./img/makeup/small-4.png" height="112" width="140"></amp-img>
+          <div class="related-product-title">
+            <b>Nail-ed It: Matte Coat.</b>
+            $7
+          </div>
+        </div>
+      </div>
+      <div slot="next-arrow"></div>
+      <div slot="prev-arrow"></div>
+    </amp-base-carousel>
+  </div>
+
+  <div class="footer">
+    <ul class="left-col">
+      <li>Our Story</li>
+      <li>The GLAMP Team</li>
+      <li>Careers</li>
+    </ul>
+    <ul class="right-col">
+      <li>Shipping Info</li>
+      <li>Privacy Policy</li>
+      <li>FAQ</li>
+    </ul>
+  </div>
+</body>
+</html>
