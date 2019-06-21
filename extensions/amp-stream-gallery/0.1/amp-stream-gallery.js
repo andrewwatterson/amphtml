@@ -542,7 +542,7 @@ class AmpStreamGallery extends AMP.BaseElement {
       const maxContainerWidth =
         items > maxVisibleSlides
           ? `${maxVisibleSlides * maxItemWidth_}px`
-          : minItems < maxItems
+          : minItems <= maxItems
           ? `${minItems * maxItemWidth_}px`
           : '';
 
