@@ -14,6 +14,7 @@
       --beige: #F6E3D1;
       --brown: #CC8038;
       --gray: #555555;
+      --page-padding: 25px;
     }
 
     .header {
@@ -23,18 +24,16 @@
       box-shadow: 0px 0px 6px 0px rgba(0,0,0,.3);
     }
 
-    .page-content {
-      padding: 25px;
-    }
-
-    h2 {
+    h1, h2 {
       color: var(--brown);
-      font-size: 28px;
       font-weight: 800;
       letter-spacing: -.05em;
       margin: 0; padding: 0;
       margin-bottom: 16px;
     }
+
+    h1 { font-size: 36px; }
+    h2 { font-size: 28px; }
 
     .logo {
       font-size: 40px;
@@ -53,7 +52,11 @@
       margin-left: -16px;
     }
 
-    .product-details {
+    .product-text {
+      padding: var(--page-padding);
+    }
+
+    .product-subtext {
       display: flex;
       align-items: flex-start;
       margin-bottom: 36px;
@@ -96,6 +99,10 @@
 
     [slot="next-arrow"], [slot="prev-arrow"] {
       display: none;
+    }
+
+    .related-products {
+      padding: var(--page-padding);
     }
 
     .related-product-wrapper {
@@ -156,28 +163,29 @@
     <div class="slogan">treat yourself</div>
   </div>
 
-  <amp-img src="./img/makeup/2.jpg" layout="responsive" width="4460" height="2975"></amp-img>
+  <div class="product-details">
 
-  <div class="page-content">
-    <h2>The Deets.</h2>
+    <amp-img src="./img/makeup/2.jpg" layout="responsive" width="4460" height="2975"></amp-img>
 
-    <div class="product-details">
-      <div class="product-description">
-        This product evens out discoloration and leaves your face looking toned, even, and dewy. The breathable, ultra thin formula adapts to the skin, making application simple.
-        <br /><br />
-        1.4oz/35g
-      </div>
-      <div class="buy-button">
-        <div class="buy-cta">Buy Now</div>
-        <div class="buy-price">$23</div>
+    <div class="product-text">
+      <h1>Clever Makeup Product Name</h1>
+      <div class="product-subtext">
+        <div class="product-description">
+          This product evens out discoloration and leaves your face looking toned, even, and dewy. The breathable, ultra thin formula adapts to the skin, making application simple.
+          <br /><br />
+          1.4oz/35g
+        </div>
+        <div class="buy-button">
+          <div class="buy-cta">Buy Now</div>
+          <div class="buy-price">$23</div>
+        </div>
       </div>
     </div>
-
+  </div>
+  <div class="related-products">
     <h2>Related Products.</h2>
     <amp-stream-gallery
-      layout="responsive"
-      height=2
-      width=3
+      height="200"
       min-item-width="160"
       max-item-width="180"
     >
@@ -219,7 +227,7 @@
       </div>
       <div slot="next-arrow"></div>
       <div slot="prev-arrow"></div>
-    </amp-base-carousel>
+    </amp-stream-gallery>
   </div>
 
   <div class="footer">
