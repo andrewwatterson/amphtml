@@ -22,6 +22,18 @@
       height: 48px;
       padding: 11px 25px;
       box-shadow: 0px 0px 6px 0px rgba(0,0,0,.3);
+      display: flex;
+      align-items: center;
+    }
+
+    .spacer {
+      flex: 1 0 auto;
+    }
+
+    .hamburger {
+      height: 30px;
+      width: 30px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' fill='%23FFFFFF'%3E%3Crect y='4' width='30' height='3' /%3E%3Crect y='13' width='30' height='3' /%3E%3Crect y='22' width='30' height='3' /%3E%3C/svg%3E");
     }
 
     h1, h2 {
@@ -35,25 +47,27 @@
     h1 { font-size: 36px; }
     h2 { font-size: 28px; }
 
-    .logo {
+    .logo > div {
+      display: inline-block;
+      letter-spacing: -.1em;
+    }
+
+    .name {
       font-size: 40px;
       font-weight: 900;
-      letter-spacing: -.1em;
-      display: inline-block;
       color: rgba(255,255,255,.6);
     }
 
     .slogan {
       font-size: 12px;
       font-weight: 400;
-      letter-spacing: -.1em;
-      display: inline-block;
       color: white;
       margin-left: -16px;
     }
 
     .product-text {
       padding: var(--page-padding);
+      box-sizing: border-box;
     }
 
     .product-subtext {
@@ -90,15 +104,6 @@
     .buy-price {
       padding-top: 12px;
       font-size: 20px;
-    }
-
-    amp-base-carousel {
-      margin-right: -25px;
-      margin-bottom: 36px;
-    }
-
-    [slot="next-arrow"], [slot="prev-arrow"] {
-      display: none;
     }
 
     .related-products {
@@ -138,6 +143,8 @@
     .footer {
       background-color: var(--beige);
       padding: 35px 25px;
+      font-size: 12px;
+      color: var(--gray);
     }
 
     .footer ul, .footer li {
@@ -148,24 +155,107 @@
       list-style: none;
       width: 150px;
       display: inline-block;
-      color: var(--gray);
-      font-size: 12px;
     }
 
     .footer li {
       padding-bottom: 8px;
     }
+
+    .links { margin-bottom: 25px; }
+
+    .social-share { display: none; }
+
+    .social-share > * { margin-right: 10px; }
+
+    .social-share b {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background-color: var(--brown);
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .arrow-button {
+      width: 12px;
+      height: 12px;
+      background-color: red;
+    }
+
+    .arrow-button[slot="prev-arrow"] {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 40'%3E%3Cpath fill='%23CC8038' d='M1.59,1.5L1.59,1.5c1.13-1.11,2.95-1.11,4.08,0l16.69,16.36c1.18,1.16,1.2,3.06,0.04,4.24 c-0.01,0.01-0.03,0.03-0.04,0.04L5.67,38.5c-1.13,1.11-2.95,1.11-4.08,0c-1.1-1.08-1.12-2.85-0.04-3.96 c0.01-0.01,0.03-0.03,0.04-0.04L16.39,20L1.59,5.5c-1.1-1.08-1.12-2.85-0.04-3.96C1.56,1.53,1.58,1.51,1.59,1.5z'/%3E%3C/svg%3E");
+    }
+
+    @media (min-width: 800px) {
+      .product-details {
+        padding: 30px;
+        display: flex;
+      }
+
+      .product-image-wrapper {
+        width: 60%;
+        margin-right: 20px;
+      }
+      .product-text {
+        width: 40%;
+        padding-bottom: 0px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .product-subtext {
+        flex: 1 0 auto;
+        flex-direction: column;
+        margin-bottom: 10px;
+      }
+
+      .product-description {
+        margin-bottom: 20px;
+      }
+
+      .buy-button {
+        display: flex;
+        align-items: baseline;
+        flex: 0 0 auto;
+      }
+
+      .buy-price { padding: 0; }
+
+      .buy-cta {
+        border-bottom: none;
+        border-right: 1px solid white;
+        padding: 0;
+        padding-right: 10px;
+        margin-right: 10px;
+      }
+
+      .footer {
+        display: flex;
+      }
+
+      .social-share { display: block; }
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="logo">GLAMP</div>
-    <div class="slogan">treat yourself</div>
+    <div class="logo">
+      <div class="name">GLAMP</div>
+      <div class="slogan">treat yourself</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="hamburger"></div>
   </div>
 
   <div class="product-details">
 
-    <amp-img src="./img/makeup/2.jpg" layout="responsive" width="4460" height="2975"></amp-img>
+    <div class="product-image-wrapper">
+      <amp-img src="./img/makeup/2.jpg" layout="responsive" width="50" height="33"></amp-img>
+    </div>
 
     <div class="product-text">
       <h1>Clever Makeup Product Name</h1>
@@ -175,6 +265,7 @@
           <br /><br />
           1.4oz/35g
         </div>
+        <div class="spacer"></div>
         <div class="buy-button">
           <div class="buy-cta">Buy Now</div>
           <div class="buy-price">$23</div>
@@ -187,8 +278,11 @@
     <amp-stream-gallery
       height="200"
       min-item-width="160"
-      max-item-width="180"
+      max-item-width="160"
+      outset-arrows="true"
     >
+      <div style="arrow-button" slot="prev-arrow">as</div>
+      <div style="arrow-button" slot="next-arrow">df</div>
       <div class="related-product-wrapper">
         <div class="related-product">
           <amp-img src="./img/makeup/small-1.png" height="112" width="140"></amp-img>
@@ -225,22 +319,67 @@
           </div>
         </div>
       </div>
-      <div slot="next-arrow"></div>
-      <div slot="prev-arrow"></div>
+      <div class="related-product-wrapper">
+        <div class="related-product">
+          <amp-img src="./img/makeup/small-1.png" height="112" width="140"></amp-img>
+          <div class="related-product-title">
+            <b>The Ultimate Travel Set.</b>
+            $42
+          </div>
+        </div>
+      </div>
+      <div class="related-product-wrapper">
+        <div class="related-product">
+          <amp-img src="./img/makeup/small-3.png" height="112" width="140"></amp-img>
+          <div class="related-product-title">
+            <b>At First Blush Deluxe.</b>
+            $11
+          </div>
+        </div>
+      </div>
+      <div class="related-product-wrapper">
+        <div class="related-product">
+          <amp-img src="./img/makeup/small-2.png" height="112" width="140"></amp-img>
+          <div class="related-product-title">
+            <b>Our Best Brush Yet.</b>
+            $14
+          </div>
+        </div>
+      </div>
+      <div class="related-product-wrapper">
+        <div class="related-product">
+          <amp-img src="./img/makeup/small-4.png" height="112" width="140"></amp-img>
+          <div class="related-product-title">
+            <b>Nail-ed It: Matte Coat.</b>
+            $7
+          </div>
+        </div>
+      </div>
     </amp-stream-gallery>
   </div>
 
   <div class="footer">
-    <ul class="left-col">
-      <li>Our Story</li>
-      <li>The GLAMP Team</li>
-      <li>Careers</li>
-    </ul>
-    <ul class="right-col">
-      <li>Shipping Info</li>
-      <li>Privacy Policy</li>
-      <li>FAQ</li>
-    </ul>
+    <div class="links">
+      <ul class="left-col">
+        <li>Our Story</li>
+        <li>The GLAMP Team</li>
+        <li>Careers</li>
+      </ul>
+      <ul class="right-col">
+        <li>Shipping Info</li>
+        <li>Privacy Policy</li>
+        <li>FAQ</li>
+      </ul>
+    </div>
+    <div class="social-share">
+      <b>Social Media</b>
+      <div class="social-link"></div><div class="social-link"></div><div class="social-link"></div><div class="social-link"></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="copyright">
+      &copy;&nbsp;<b>2019 GLAMP Enterprises.</b><br />
+      All Rights Reserved.<br /><br />
+      <a href="#">Impressum</a>
   </div>
 </body>
 </html>
