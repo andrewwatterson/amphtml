@@ -278,11 +278,13 @@
     <amp-stream-gallery
       height="200"
       min-item-width="160"
-      max-item-width="160"
-      outset-arrows="true"
+      max-item-width="320"
+      peek="(max-width: 500px) .5, 0"
+      outset-arrows="(min-width: 499px) true, false"
+      inset-arrow-visibility="never"
     >
-      <div style="arrow-button" slot="prev-arrow">as</div>
-      <div style="arrow-button" slot="next-arrow">df</div>
+      <div class="arrow-button" slot="prev-arrow">as</div>
+      <div class="arrow-button" slot="next-arrow">df</div>
       <div class="related-product-wrapper">
         <div class="related-product">
           <amp-img src="./img/makeup/small-1.png" height="112" width="140"></amp-img>
