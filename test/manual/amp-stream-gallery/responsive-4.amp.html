@@ -14,12 +14,6 @@
       padding: 0 5px
     }
 
-    @media (min-width: 500px) {
-      .item > * {
-        max-width: 160px;
-      }
-    }
-
     .item img {
       object-fit: contain;
     }
@@ -32,12 +26,12 @@
       layout="fixed-height"
       height="128"
       loop="true"
-      min-item-width="(min-width: 499px) 160, 0"
+      min-item-width="(pointer: coarse) 0, 160"
       max-item-width="180"
       max-visible-count="5"
-      peek="(min-width: 499px) 0, 0.5"
+      peek="(pointer: coarse) 0.5, 0"
       inset-arrow-visibility="never"
-      outset-arrows="(min-width: 499px) true, false">
+      outset-arrows="(pointer: coarse) false, true">
     <div class="item">
       <amp-img src="../amp-base-carousel/img/redgradient.png" layout="flex-item"></amp-img>
     </div>
@@ -63,7 +57,10 @@
   <p>Configuration:</p>
   <ul>
     <li>
-      Slide imgs have 10px spacing between each other, growing up to 20px.
+      Outset arrows when using a mouse, peek when no mouse.
+    </li>
+    <li>
+      Slide imgs have 10px spacing between each other.
     </li>
     <li>
       Slide imgs are always 160px wide.

@@ -439,6 +439,8 @@ class AmpStreamGallery extends AMP.BaseElement {
   }
 
   /**
+   * TODO(sparhami) If swipe is disabled, then auto should show the inset arrow
+   * buttons, even if there is a peek value.
    * @return {boolean}
    * @private
    */
@@ -451,8 +453,7 @@ class AmpStreamGallery extends AMP.BaseElement {
       return true;
     }
 
-    const peeking = Math.round(this.visibleCount_) != this.visibleCount_;
-    return this.hadTouch_ || peeking;
+    return this.hadTouch_ || this.peek_ != 0;
   }
 
   /**
