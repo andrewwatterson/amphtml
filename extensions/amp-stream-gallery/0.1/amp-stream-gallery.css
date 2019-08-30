@@ -36,29 +36,41 @@ amp-stream-gallery .i-amphtml-carousel-scroll {
 
 .i-amphtml-stream-gallery-prev,
 .i-amphtml-stream-gallery-next {
-  filter: drop-shadow(0px 1px 2px #4a4a4a);
-  width: 40px;
-  height: 40px;
-  padding: 20px;
-  background-color: transparent;
+  box-shadow: 0px 2px 6px 0px rgba(0,0,0,.4);
+  height: 32px;
+  width: 32px;
+  background-color: rgba(255,255,255,.7);
   border: none;
   outline: none;
+  cursor: pointer;
 }
 /* End sharded arrow styles */
 
 
 /* Start outset arrow styles */
+[i-amphtml-stream-gallery-outset-arrows] > .i-amphtml-stream-gallery-arrow-prev-slot > .i-amphtml-stream-gallery-prev,
+[i-amphtml-stream-gallery-outset-arrows] > .i-amphtml-stream-gallery-arrow-next-slot > .i-amphtml-stream-gallery-next {
+  border-radius: 16px;
+  background-size: 16px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 [i-amphtml-stream-gallery-outset-arrows] > .i-amphtml-stream-gallery-arrow-prev-slot > [disabled],
 [i-amphtml-stream-gallery-outset-arrows] > .i-amphtml-stream-gallery-arrow-next-slot > [disabled] {
   opacity: 0.4;
 }
 
 [i-amphtml-stream-gallery-outset-arrows] > .i-amphtml-stream-gallery-arrow-prev-slot > .i-amphtml-stream-gallery-prev {
-  background-image: url('data:image/svg+xml;charset=utf-8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path  d="M14,7.4 L9.4,12 L14,16.6" fill="none" stroke="#000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /></svg>');
+  margin-left: 6px;
+  margin-right: 12px;
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="9.59,2 11,3.41 6.42,8 11,12.59 9.59,14 3.59,8 "/></svg>');
 }
 
 [i-amphtml-stream-gallery-outset-arrows] > .i-amphtml-stream-gallery-arrow-next-slot > .i-amphtml-stream-gallery-next {
-  background-image: url('data:image/svg+xml;charset=utf-8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path  d="M10,7.4 L14.6,12 L10,16.6" fill="none" stroke="#000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /></svg>');
+  margin-right: 6px;
+  margin-left: 12px;
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="6.41,2 5,3.41 9.58,8 5,12.59 6.41,14 12.41,8 "/></svg>');
 }
 /* End outset arrow styles */
 
@@ -78,7 +90,7 @@ amp-stream-gallery .i-amphtml-carousel-scroll {
 [i-amphtml-stream-gallery-hide-buttons]:not([i-amphtml-stream-gallery-outset-arrows]) > .i-amphtml-stream-gallery-arrow-prev-slot,
 [i-amphtml-stream-gallery-hide-buttons]:not([i-amphtml-stream-gallery-outset-arrows]) > .i-amphtml-stream-gallery-arrow-next-slot {
   opacity: 0;
-  /** 
+  /**
    * Note, screen readers can still activate the buttons when hide buttons is
    * specified, even though we have `pointer-events: none`.
    */
