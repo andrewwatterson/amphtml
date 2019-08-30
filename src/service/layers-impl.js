@@ -734,7 +734,13 @@ export class LayoutElement {
     // Layers inside a shadow tree may contain children from the light tree.
     const rootNode = rootNodeFor(element);
     const host = rootNode && rootNode.host;
-    return !!host && host.contains(other);
+    if (!!host && host.contains(other)) {
+      return true;
+    }
+
+    const otherRoot = rootNodeFor(other);
+    const otherHost = otherRoot && otherRoot.host;
+    return !!otherHost && this.contains_(element, otherHost);
   }
 
   /**

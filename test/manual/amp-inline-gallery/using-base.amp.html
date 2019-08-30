@@ -1,0 +1,133 @@
+<!doctype html>
+<html ⚡>
+<head>
+  <meta charset="utf-8">
+  <title>A Basic inline gallery</title>
+  <link rel="canonical" href="amps.html" >
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
+  <script async custom-element="amp-inline-gallery" src="https://cdn.ampproject.org/v0/amp-inline-gallery-0.1.js"></script>
+  <script async custom-element="amp-base-carousel" src="https://cdn.ampproject.org/v0/amp-base-carousel-0.1.js"></script>
+  <script async custom-element="amp-truncate-text" src="https://cdn.ampproject.org/v0/amp-truncate-text-0.1.js"></script>
+  <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <style amp-custom>
+    .with-background {
+      background-color: #eee;
+    }
+
+    .caption {
+      height: 2.5em;
+      line-height: 1.25em;
+      font-size: 1em;
+    }
+
+    .prev-arrow,
+    .next-arrow {
+      filter: drop-shadow(0px 1px 2px #4a4a4a);
+      width: 40px;
+      height: 40px;
+      padding: 20px;
+      background-color: transparent;
+      border: none;
+      outline: none;
+    }
+
+    .prev-arrow > svg,
+    .next-arrow > svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>A Basic inline gallery</h1>
+  <div class="with-background">
+    Some content above the carousel.
+  </div>
+  <amp-inline-gallery layout="container">
+    <amp-base-carousel layout="responsive" width="3.6" height="2" visible-count="1.2" snap-align="center" loop="true">
+      <button class="prev-arrow" slot="prev-arrow">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path  d="M14,7.4 L9.4,12 L14,16.6" fill="none" stroke="#fff" stroke-width="2px" stroke-linejoin="round" stroke-linecap="round" /></svg>
+      </button>
+      <button class="next-arrow" slot="next-arrow">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path  d="M10,7.4 L14.6,12 L10,16.6" fill="none" stroke="#fff" stroke-width="2px" stroke-linejoin="round" stroke-linecap="round" /></svg>
+      </button>
+      <amp-inline-gallery-slide layout="flex-item">
+        <amp-img src="../amp-base-carousel/img/redgradient.png" layout="fill"></amp-img>
+        <span class="caption" slot="caption">
+          This is an image with a red gradient. Red is the color of several fruits like strawberries, cherries, tomatoes and apples.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper turpis vel commodo scelerisque. Phasellus
+          luctus nunc ut elit cursus, et imperdiet diam vehicula. Duis et nisi sed urna blandit bibendum et sit amet erat.
+          Suspendisse potenti. Curabitur consequat volutpat arcu nec elementum. Etiam a turpis ac libero varius condimentum.
+          Maecenas sollicitudin felis aliquam tortor vulputate, ac posuere velit semper.
+
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper turpis vel commodo scelerisque. Phasellus
+          luctus nunc ut elit cursus, et imperdiet diam vehicula. Duis et nisi sed urna blandit bibendum et sit amet erat.
+          Suspendisse potenti. Curabitur consequat volutpat arcu nec elementum. Etiam a turpis ac libero varius condimentum.
+          Maecenas sollicitudin felis aliquam tortor vulputate, ac posuere velit semper.
+
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper turpis vel commodo scelerisque. Phasellus
+          luctus nunc ut elit cursus, et imperdiet diam vehicula. Duis et nisi sed urna blandit bibendum et sit amet erat.
+          Suspendisse potenti. Curabitur consequat volutpat arcu nec elementum. Etiam a turpis ac libero varius condimentum.
+          Maecenas sollicitudin felis aliquam tortor vulputate, ac posuere velit semper.
+
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper turpis vel commodo scelerisque. Phasellus
+          luctus nunc ut elit cursus, et imperdiet diam vehicula. Duis et nisi sed urna blandit bibendum et sit amet erat.
+          Suspendisse potenti. Curabitur consequat volutpat arcu nec elementum. Etiam a turpis ac libero varius condimentum.
+          Maecenas sollicitudin felis aliquam tortor vulputate, ac posuere velit semper.
+
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper turpis vel commodo scelerisque. Phasellus
+          luctus nunc ut elit cursus, et imperdiet diam vehicula. Duis et nisi sed urna blandit bibendum et sit amet erat.
+          Suspendisse potenti. Curabitur consequat volutpat arcu nec elementum. Etiam a turpis ac libero varius condimentum.
+          Maecenas sollicitudin felis aliquam tortor vulputate, ac posuere velit semper.
+        </span>
+      </amp-inline-gallery-slide>
+      <amp-inline-gallery-slide layout="flex-item">
+        <amp-img src="../amp-base-carousel/img/greengradient.png" layout="fill"></amp-img>
+        <span class="caption" slot="caption">
+          Notable characters that are green include: Shrek, Kermit the Frog, Yoda, and Hulk. It is also the color of grass and leaves.
+        </span>
+      </amp-inline-gallery-slide>
+      <amp-inline-gallery-slide layout="flex-item">
+        <amp-img src="../amp-base-carousel/img/bluegradient.png" layout="fill"></amp-img>
+        <span class="caption" slot="caption">
+          One of the three primary colors, the color blue symbolizes wisdom and intelligence. Some shades of blue include ultramarine, navy blue, cerulean, and sapphire.
+        </span>
+      </amp-inline-gallery-slide>
+      <amp-inline-gallery-slide layout="flex-item">
+        <amp-img src="../amp-base-carousel/img/orangegradient.png" layout="fill"></amp-img>
+        <span class="caption" slot="caption">
+          The word orange ultimately comes from the Sanskrit नारङ्ग (nāraṅga, “orange tree”).
+        </span>
+      </amp-inline-gallery-slide>
+      <amp-inline-gallery-slide>
+        <amp-img src="../amp-base-carousel/img/tealgradient.png" layout="fill"></amp-img>
+      </amp-inline-gallery-slide>
+      <amp-inline-gallery-slide>
+        <amp-img src="../amp-base-carousel/img/lemonyellowgradient.png" layout="fill"></amp-img>
+      </amp-inline-gallery-slide>
+      <amp-inline-gallery-slide>
+        <amp-img src="../amp-base-carousel/img/lilacgradient.png" layout="fill"></amp-img>
+      </amp-inline-gallery-slide>
+    </amp-base-carousel>
+    <amp-inline-gallery-captions class="caption" layout="container">
+    </amp-inline-gallery-captions>
+    <amp-inline-gallery-pagination layout="fixed-height" height="24">
+    </amp-inline-gallery-pagination>
+    <amp-inline-gallery-thumbnails
+        layout="container"
+        thumbnail-aspect-ratio-width="3"
+        thumbnail-aspect-ratio-height="2"
+        style="--amp-thumbnail-margin: 4px">
+        <div slot="sizer" style="padding: 4px 8px">
+          <div style="padding-top: calc(100% * (2 / 9))"></div>
+        </div>
+    </amp-inline-gallery-thumbnails>
+  </amp-inline-gallery>
+  <div class="with-background">
+    Some content below the carousel.
+  </div>
+</body>
+</html>

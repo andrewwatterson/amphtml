@@ -1,0 +1,5 @@
+:host {
+  pointer-events: none;
+  padding-top: var(--amp-caption-margin-top);
+  margin-top: calc(-1 * var(--amp-caption-height, 0));
+}

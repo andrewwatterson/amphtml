@@ -185,6 +185,10 @@ class AmpCarousel extends AMP.BaseElement {
     this.element.addEventListener('indexchange', event => {
       this.onIndexChanged_(event);
     });
+    this.element.addEventListener('goToSlide', event => {
+      const detail = getDetail(event);
+      this.carousel_.goToSlide(detail['index']);
+    });
     this.prevArrowSlot_.addEventListener('click', event => {
       if (event.target != event.currentTarget) {
         this.carousel_.prev(ActionSource.GENERIC_HIGH_TRUST);
@@ -245,9 +249,13 @@ class AmpCarousel extends AMP.BaseElement {
   /**
    * Moves the Carousel to a given index.
    * @param {number} index
+   * @return {!Promise<undefined>}
    */
   goToSlide(index) {
     this.carousel_.goToSlide(index, {smoothScroll: false});
+    // Need to wait until an animation frame to make sure the scroll position
+    // was applied.
+    return this.mutateElement(() => {});
   }
 
   /**

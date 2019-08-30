@@ -230,7 +230,7 @@ export class LightboxManager {
   }
 
   /**
-   * Unwraps a figure element and lightboxes the
+   * Unwraps a figure element and lightboxes the img.
    * @param {!Element} figure
    * @param {string} lightboxGroupId
    * @return {?Element}
@@ -243,6 +243,23 @@ export class LightboxManager {
       figure,
       child => child.tagName !== 'FIGCAPTION'
     );
+    if (element) {
+      element.setAttribute('lightbox', lightboxGroupId);
+    }
+    return element;
+  }
+
+  /**
+   * Unwraps a slide element and lightboxes the ima.
+   * @param {!Element} slide
+   * @param {string} lightboxGroupId
+   * @return {?Element}
+   * @private
+   */
+  unwrapLightboxedSlide_(slide, lightboxGroupId) {
+    // Assume that the lightbox target is whichever element inside the figure
+    // that is not the figcaption.
+    const element = childElement(slide, child => !child.hasAttribute('slot'));
     if (element) {
       element.setAttribute('lightbox', lightboxGroupId);
     }
@@ -265,6 +282,17 @@ export class LightboxManager {
         return;
       }
       element = unwrappedFigureElement;
+    }
+
+    if (element.tagName == 'AMP-INLINE-GALLERY-SLIDE') {
+      const unwrappedSlideElement = this.unwrapLightboxedSlide_(
+        element,
+        lightboxGroupId
+      );
+      if (!unwrappedSlideElement) {
+        return;
+      }
+      element = unwrappedSlideElement;
     }
 
     userAssert(
@@ -324,6 +352,16 @@ export class LightboxManager {
       const figCaption = elementByTag(figureParent, 'figcaption');
       if (figCaption) {
         return figCaption./*OK*/ innerText;
+      }
+    }
+    const slide = closestAncestorElementBySelector(
+      element,
+      'amp-inline-gallery-slide'
+    );
+    if (slide) {
+      const content = slide['getCaptionContent']();
+      if (content) {
+        return content.trim();
       }
     }
     const ariaDescribedBy = element.getAttribute('aria-describedby');

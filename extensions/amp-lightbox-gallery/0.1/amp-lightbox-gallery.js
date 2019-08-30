@@ -45,6 +45,7 @@ import {
 import {dev, devAssert, userAssert} from '../../../src/log';
 import {dict} from '../../../src/utils/object';
 import {escapeCssSelectorIdent} from '../../../src/css';
+import {findIndex} from '../../../src/utils/array';
 import {getData, getDetail, isLoaded, listen} from '../../../src/event-helper';
 import {getElementServiceForDoc} from '../../../src/element-service';
 import {htmlFor} from '../../../src/static-template';
@@ -59,7 +60,7 @@ import {triggerAnalyticsEvent} from '../../../src/analytics';
 const TAG = 'amp-lightbox-gallery';
 const DEFAULT_GALLERY_ID = 'amp-lightbox-gallery';
 const SLIDE_ITEM_SELECTOR =
-  '.i-amphtml-slide-item, .i-amphtml-carousel-slotted';
+  '.i-amphtml-slide-item, .i-amphtml-carousel-slotted, > :not([slot])';
 
 /**
  * Set of namespaces that indicate the lightbox controls mode.
@@ -1104,7 +1105,8 @@ export class AmpLightboxGallery extends AMP.BaseElement {
     // type='carousel' starts supporting goToSlide.
     return closestAncestorElementBySelector(
       sourceElement,
-      'amp-carousel[type="slides"], amp-base-carousel'
+      'amp-carousel[type="slides"], amp-base-carousel, ' +
+        'amp-inline-gallery-slides'
     );
   }
 
@@ -1120,10 +1122,9 @@ export class AmpLightboxGallery extends AMP.BaseElement {
       const allSlides = toArray(
         scopedQuerySelectorAll(parentCarousel, SLIDE_ITEM_SELECTOR)
       );
-      const targetSlide = dev().assertElement(
-        closestAncestorElementBySelector(target, SLIDE_ITEM_SELECTOR)
-      );
-      const targetSlideIndex = allSlides.indexOf(targetSlide);
+      const targetSlideIndex = findIndex(allSlides, slide => {
+        return slide.contains(target);
+      });
       devAssert(parentCarousel)
         .getImpl()
         .then(carousel => carousel.goToSlide(targetSlideIndex));

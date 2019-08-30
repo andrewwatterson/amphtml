@@ -15,6 +15,7 @@
  */
 
 :host {
+  position: relative;
   padding: 0 !important;
   border: none !important;
 }
@@ -27,7 +28,7 @@
   position: static;
 }
 
-:host(:not([i-amphtml-truncate-expanded])) .collapse-slot {
+:host(:not([i-amphtml-truncate-expanded])) .expanded-slot {
   display: none;
 }
 
@@ -44,7 +45,7 @@
   white-space: nowrap !important;
 }
 
-:host(:not([i-amphtml-truncate-overflow])) .expand-slot {
+:host(:not([i-amphtml-truncate-overflow])) .collapsed-slot {
   display: none;
 }
 

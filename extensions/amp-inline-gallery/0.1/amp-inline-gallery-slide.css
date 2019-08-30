@@ -1,0 +1,77 @@
+:host {
+  /*
+   * We do not want the slide to be positioned, so the captions can position
+   * relative to the gallery itself.
+   */
+  position: static !important;
+  /*
+   * Do not transform the slide, but rather transform just the content.
+   */
+  transform: none !important;
+  will-change: auto !important;
+}
+
+:host(.i-amphtml-layout-size-defined) {
+  /*
+  * Since the content is translated, it may be outside the area of the
+  * slide itself.
+  */
+  overflow: visible !important;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  /* Override default from <figure> */
+  margin: 0;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Subtract out height for the caption */
+  height: calc(100% - calc(var(--amp-caption-height, 0px)));
+  transform: var(--content-transform, translateZ(1px));
+  will-change: transform;
+  overflow: hidden;
+}
+
+.caption {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  margin-top: var(--amp-caption-margin-top);
+  height: var(--amp-caption-height, 0);
+  overflow: hidden;
+  opacity: var(--caption-opacity);
+}
+
+amp-truncate-text {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.see-more {
+  float: right;
+  padding: 0;
+  padding-left: 6px;
+  border: 0;
+  color: #48f;
+  background-color: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.25em;
+}
+
+.credit {
+  clear: both;
+}
+
+::slotted(*) {
+  width: 100%;
+}

@@ -1,0 +1,84 @@
+:host {
+  --amp-igp-max-dots-width-percentage: 0.6;
+  --amp-igp-dot-width: 10;
+  --amp-igp-dot-max-spacing: 12;
+  --amp-igp-dot-min-spacing: 8;
+}
+
+.pagination-dots {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  max-width: calc(100% * var(--amp-igp-max-dots-width-percentage));
+  margin: auto;
+  overflow-x: auto;
+}
+
+.pagination-dot-container {
+  display: flex;
+  width: calc(
+    1px * var(--amp-igp-dot-max-spacing) +
+    1px * var(--amp-igp-dot-width));
+  min-width: calc(
+    1px * var(--amp-igp-dot-min-spacing) +
+    1px * var(--amp-igp-dot-width));
+  justify-content: center;
+}
+
+.pagination-dot {
+  position: relative;
+  background-color: #aaa;
+}
+
+.pagination-dot-progress {
+  position: absolute;
+  top: 0;
+  background-color: #333;
+  transform: scale(calc(1 - var(--percentage-falloff)));
+  opacity: calc(1 - var(--percentage-falloff));
+}
+
+.pagination-dot,
+.pagination-dot-progress {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pagination-numbers {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px;
+}
+
+.pagination-index,
+.pagination-total {
+  padding: 0 3px;
+}
+
+.pagination-dots[hidden],
+.pagination-numbers[hidden] {
+  display: none;
+}
+
+:host([inset]) {
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--amp-caption-margin-top) + var(--amp-caption-height, 0));
+  display: block !important;
+  margin: 8px;
+}
+
+:host([inset]) .pagination-dot {
+  background-color: #bbb;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25),
+              0 1px 1px rgba(0, 0, 0, 0.4);
+  mix-blend-mode: hard-light;
+}
+
+:host([inset]) .pagination-dot-progress {
+  background-color: #fff;
+}

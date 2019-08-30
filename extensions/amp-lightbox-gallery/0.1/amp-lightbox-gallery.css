@@ -96,6 +96,7 @@ amp-lightbox-gallery amp-carousel {
 .i-amphtml-lbg-overlay[i-amphtml-lbg-fade="out"] {
   animation-timing-function: linear;
 }
+/* End description styles */
 
 .i-amphtml-lbg[gallery-view] .i-amphtml-lbg-gallery {
   display: grid !important;

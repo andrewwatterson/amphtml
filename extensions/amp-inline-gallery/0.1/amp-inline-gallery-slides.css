@@ -1,0 +1,37 @@
+/*
+ * This is a flex container containing the arrow slots. Since this uses flex,
+ * it will reverse the arrow positions when using RTL.
+ */
+.i-amphtml-inline-gallery-slides-arrows {
+  position: absolute;
+  top: 0;
+  bottom: var(--amp-caption-height, 0);
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* Make this container not block swipe since it is stacked on top. */
+  pointer-events: none;
+}
+
+[name="prev-arrow"],
+[name="next-arrow"] {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+
+[name="prev-arrow"]::slotted(*),
+[name="next-arrow"]::slotted(*) {
+  /* Reenable pointer events stopped at the parent container. */
+  pointer-events: all;
+}
+
+/* Rotate arrow slots for RTL. This applies to default / custom arrows. */
+:host([dir="rtl"])_[name="prev-arrow"],
+:host([dir="rtl"]) [name="next-arrow"] {
+  transform: scaleX(-1);
+}

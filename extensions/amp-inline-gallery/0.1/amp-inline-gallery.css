@@ -1,0 +1,15 @@
+amp-inline-gallery {
+  --amp-caption-margin-top: 6px;
+}
+
+amp-inline-gallery amp-img > .i-amphtml-replaced-content {
+  /*
+   * Apply contain object-fit to all replaced content to avoid distorted ratios.
+   */
+  object-fit: contain;
+}
+
+amp-inline-gallery > amp-base-carousel,
+amp-inline-gallery > amp-inline-gallery-slides {
+  padding-bottom: var(--amp-caption-height, 0px);
+}

@@ -172,10 +172,10 @@ function getOverflowY(element) {
  *
  * @param {{
  *   container: !Element,
- *   overflowElement: ?Element,
+ *   overflowElements: !Array<!Element>,
  * }} config
  */
-export function truncateText({container, overflowElement} = {}) {
+export function truncateText({container, overflowElements} = {}) {
   clearTruncated(container);
 
   // If everything fits while the overflow button is hidden, we are done.
@@ -189,7 +189,30 @@ export function truncateText({container, overflowElement} = {}) {
   // Set the container as truncateed, so we show the overflow element and we can
   // truncate taking the size into account.
   setTruncated(container);
-  runTruncation(container, containerRect, overflowElement);
+  runTruncation(container, containerRect, overflowElements);
+}
+
+/**
+ *
+ * @param {*} container
+ * @param {*} filter
+ */
+export function getNonTruncatedTextContent(container, filter) {
+  /**
+   *
+   * @param {*} node
+   */
+  function combinedFilter(node) {
+    return node.nodeType == Node.TEXT_NODE || filter(node);
+  }
+
+  return getAllNodes(container, combinedFilter)
+    .filter(node => node.nodeType == Node.TEXT_NODE)
+    .map(node => {
+      const data = node[TEXT_DATA_PROPERTY];
+      return data ? data.originalText : node.data;
+    })
+    .join('');
 }
 
 /**
@@ -214,12 +237,12 @@ function getAllNodes(root, filter, nodes = []) {
  * truncation and truncating it.
  * @param {!Element} container The Element to do truncation for.
  * @param {!ClientRect} containerRect The rect for `container`.
- * @param {?Element} overflowElement An Element that shows when overflowing,
- *    or null if none is specified.
+ * @param {!Array<!Element>} overflowElements Any elements that should be
+ *    be showing when there is overflow.
  */
-function runTruncation(container, containerRect, overflowElement) {
+function runTruncation(container, containerRect, overflowElements) {
   const nodes = getAllNodes(container, node => {
-    return node != overflowElement;
+    return !overflowElements.includes(node);
   });
 
   // Work backwards, truncating nodes from the end until we find one that can

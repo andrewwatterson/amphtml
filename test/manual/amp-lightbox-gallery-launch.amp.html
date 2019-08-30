@@ -42,6 +42,11 @@ The amp-lightbox-gallery component provides a "lightbox” experience for AMP co
       margin: 0;
     }
 
+    .truncate {
+      max-height: 2rem;
+      overflow: hidden;
+    }
+
     amp-img[lightbox] {
       cursor: pointer;
     }
@@ -57,7 +62,7 @@ The amp-lightbox-gallery component provides a "lightbox” experience for AMP co
   </style>
 </head>
 <body>
-
+  <amp-lightbox-gallery layout="nodisplay" id="lg"></amp-lightbox-gallery>
 
   <!-- ## Basic Usage -->
   <!--
@@ -154,5 +159,23 @@ The amp-lightbox-gallery component provides a "lightbox” experience for AMP co
     </div>
   </div>
 
+  <h2>Open with expanded caption</h2>
+  <!-- You can tell the lightbox to open with the captions already expanded. -->
+
+  <div class="container">
+      <figure>
+        <amp-img
+          on="tap:lg.open(expandDescription = true)"
+          lightbox="caption-2"
+          src="https://picsum.photos/300/200"
+          width="300"
+          height="200"
+          layout="responsive"></amp-img>
+        <figcaption class="image truncate">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </figcaption>
+      </figure>
+    </div>
+  
 </body>
 </html>
