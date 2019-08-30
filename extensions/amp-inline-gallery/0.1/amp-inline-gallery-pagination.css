@@ -3,11 +3,13 @@
   --amp-igp-dot-width: 10;
   --amp-igp-dot-max-spacing: 12;
   --amp-igp-dot-min-spacing: 8;
+
+  text-align: center;
 }
 
 .pagination-dots {
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 100%;
@@ -29,21 +31,20 @@
 
 .pagination-dot {
   position: relative;
-  background-color: #aaa;
+  background-color: rgba(0,0,0,.2);
 }
 
 .pagination-dot-progress {
   position: absolute;
   top: 0;
-  background-color: #333;
-  transform: scale(calc(1 - var(--percentage-falloff)));
+  background-color: rgba(0,0,0,.6);
   opacity: calc(1 - var(--percentage-falloff));
 }
 
 .pagination-dot,
 .pagination-dot-progress {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
 
@@ -68,15 +69,19 @@
   left: 0;
   right: 0;
   bottom: calc(var(--amp-caption-margin-top) + var(--amp-caption-height, 0));
-  display: block !important;
-  margin: 8px;
+  display: inline-block !important;
+  margin-bottom: 18px;
+}
+
+:host([inset]) .pagination-dots {
+  background-color: rgba(0,0,0,.6);
+  height: 24px;
+  border-radius: 12px;
+  padding: 0px 4px;
 }
 
 :host([inset]) .pagination-dot {
-  background-color: #bbb;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25),
-              0 1px 1px rgba(0, 0, 0, 0.4);
-  mix-blend-mode: hard-light;
+  background-color: rgba(255,255,255,.5);
 }
 
 :host([inset]) .pagination-dot-progress {
